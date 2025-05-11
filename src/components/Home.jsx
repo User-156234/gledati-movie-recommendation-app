@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { fetchTrendingMovies, searchMovies } from '../api/tmdb';
 import MovieCard from './MovieCard';
+import Navbar from './Navbar';
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null); // track errors
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setError(null); // reset error
+        setError(null);
         const res = search
           ? await searchMovies(search, page)
           : await fetchTrendingMovies(page);
@@ -26,6 +27,8 @@ export default function Home() {
 
   return (
     <div className="container">
+      <Navbar /> {/* 🔹 Add Navbar at the top */}
+
       <input
         type="text"
         placeholder="Search movies..."

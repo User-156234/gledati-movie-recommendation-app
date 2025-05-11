@@ -30,3 +30,33 @@ export const fetchMovieDetails = (id) => {
     },
   });
 };
+
+export const fetchUpcomingMovies = (page = 1) => {
+  return axios.get(`${BASE_URL}/movie/upcoming`, {
+    params: {
+      api_key: API_KEY,
+      page
+    }
+  });
+};
+
+
+export const fetchGenres = () => {
+  return axios.get(`${BASE_URL}/genre/movie/list`, {
+    params: {
+      api_key: API_KEY,
+    },
+  });
+};
+
+export const fetchMoviesByGenre = (genreId, page = 1) => {
+  return axios.get(`${BASE_URL}/discover/movie`, {
+    params: {
+      api_key: API_KEY,
+      with_genres: genreId,
+      page: page,
+    },
+  });
+};
+
+

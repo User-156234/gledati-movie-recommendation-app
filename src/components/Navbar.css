@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(90deg, #141e30, #243b55);
+  padding: 1rem;
+  gap: 2rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #00ffff;
+  transition: width 0.3s;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  width: 100%;
+}
+
+.navbar a:hover,
+.navbar a.active {
+  color: #00ffff;
+  transform: scale(1.1);
+}
