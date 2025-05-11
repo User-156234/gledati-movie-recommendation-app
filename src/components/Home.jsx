@@ -46,7 +46,7 @@ export default function Home() {
             rel="noopener noreferrer"
             className="access-link"
           >
-            👉 Get Server Access
+            Get Server Access And Reload the Page 
           </a>
         </div>
       )}
