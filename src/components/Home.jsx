@@ -6,13 +6,20 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [error, setError] = useState(null); // track errors
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = search
-        ? await searchMovies(search, page)
-        : await fetchTrendingMovies(page);
-      setMovies(res.data.results);
+      try {
+        setError(null); // reset error
+        const res = search
+          ? await searchMovies(search, page)
+          : await fetchTrendingMovies(page);
+        setMovies(res.data.results);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch data. You might need to request temporary access.');
+      }
     };
     fetchData();
   }, [search, page]);
@@ -25,20 +32,39 @@ export default function Home() {
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);
-          setPage(1); // reset to page 1 on new search
+          setPage(1);
         }}
         className="search-bar"
       />
-      <div className="grid">
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </div>
-      <div className="pagination">
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Prev</button>
-        <span> Page {page} </span>
-        <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
-      </div>
+
+      {error && (
+        <div className="error">
+          <p>{error}</p>
+          <a
+            href="https://cors-anywhere.herokuapp.com/corsdemo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="access-link"
+          >
+            👉 Get Server Access
+          </a>
+        </div>
+      )}
+
+      {!error && (
+        <>
+          <div className="grid">
+            {movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+          <div className="pagination">
+            <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Prev</button>
+            <span> Page {page} </span>
+            <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
