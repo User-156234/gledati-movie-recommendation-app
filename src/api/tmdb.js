@@ -59,4 +59,18 @@ export const fetchMoviesByGenre = (genreId, page = 1) => {
   });
 };
 
+export const fetchRepresentativeMovie = (genreId) => {
+  return axios.get(`${BASE_URL}/discover/movie`, {
+    params: {
+      api_key: API_KEY,
+      with_genres: genreId,
+      sort_by: 'vote_average.desc',
+      'vote_count.gte': 1000,  // Only include well-rated, widely-voted movies
+      page: 1,
+    },
+  });
+};
+
+
+
 

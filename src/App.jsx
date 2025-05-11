@@ -13,6 +13,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/upcoming" element={<Upcoming />}/>
+        <Route path="/recommendations" element={<Recommendations/>} />
         <Route path="/recommendations/:genreId" element={<Recommendations/>} />
       </Routes>
     </Router>
