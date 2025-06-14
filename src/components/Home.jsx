@@ -8,9 +8,11 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         setError(null);
         const res = search
@@ -19,7 +21,9 @@ export default function Home() {
         setMovies(res.data.results);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch data. You might need to request temporary access.');
+        setError('Failed to fetch data from TMDB.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -27,7 +31,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <Navbar /> {/* 🔹 Add Navbar at the top */}
+      <Navbar />
 
       <input
         type="text"
@@ -40,21 +44,16 @@ export default function Home() {
         className="search-bar"
       />
 
+      {loading && <p className="loading">Loading movies...</p>}
+
       {error && (
         <div className="error">
           <p>{error}</p>
-          <a
-            href="https://cors-anywhere.herokuapp.com/corsdemo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="access-link"
-          >
-            Get Server Access And Reload the Page 
-          </a>
+          <p className="tip">Make Sure the IP allows TMDB calls</p>
         </div>
       )}
 
-      {!error && (
+      {!loading && !error && (
         <>
           <div className="grid">
             {movies.map((movie) => (
@@ -62,7 +61,12 @@ export default function Home() {
             ))}
           </div>
           <div className="pagination">
-            <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>Prev</button>
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+            >
+              Prev
+            </button>
             <span> Page {page} </span>
             <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
           </div>
