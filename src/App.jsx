@@ -5,6 +5,7 @@ import Home from './components/Home';
 import MovieDetails from './components/MovieDetails';
 import Upcoming from './components/Upcoming';
 import Recommendations from './components/recommendations';
+import ActorDetails from './components/ActorDetails';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/upcoming" element={<Upcoming />}/>
         <Route path="/recommendations" element={<Recommendations/>} />
         <Route path="/recommendations/:genreId" element={<Recommendations/>} />
+        <Route path="/actor/:id" element={<ActorDetails />} />
       </Routes>
     </Router>
   );

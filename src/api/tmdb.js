@@ -45,3 +45,8 @@ export const fetchRepresentativeMovie = (genreId) => {
     },
   });
 };
+
+export const fetchActorDetails = (id) => {
+  return instance.get(`/person/${id}`);
+};
+
