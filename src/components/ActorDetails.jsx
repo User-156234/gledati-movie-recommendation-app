@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchActorDetails } from '../api/tmdb';
 import axios from 'axios';
+import '../styles/styles.css';
 
 export default function ActorDetails() {
   const { id } = useParams();

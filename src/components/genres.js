@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchGenres } from '../api/tmdb'; // Assuming you add fetchGenres to tmdb.js
 import { useHistory } from 'react-router-dom';
+import '../styles/styles.css';
 
 export default function Genres() {
   const [genres, setGenres] = useState([]);

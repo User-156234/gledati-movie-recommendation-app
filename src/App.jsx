@@ -1,22 +1,84 @@
-// App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import MovieDetails from './components/MovieDetails';
 import Upcoming from './components/Upcoming';
 import Recommendations from './components/recommendations';
 import ActorDetails from './components/ActorDetails';
+import SignIn from './auth/SignIn';
+import Register from './auth/Register';
+import PrivateRoute from './auth/PrivateRoute';
+import Watchlist from './pages/Watchlist';
 
 export default function App() {
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/movie/:id" element={<MovieDetails />} />
-        <Route path="/upcoming" element={<Upcoming />}/>
-        <Route path="/recommendations" element={<Recommendations/>} />
-        <Route path="/recommendations/:genreId" element={<Recommendations/>} />
-        <Route path="/actor/:id" element={<ActorDetails />} />
+        {/* ✅ First page will be Register */}
+        <Route path="/" element={<Navigate to="/home" />} />
+
+        {/* ✅ Public Routes */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/signin" element={<SignIn />} />
+
+        {/* ✅ Protected Routes */}
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/movie/:id"
+          element={
+            <PrivateRoute>
+              <MovieDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/upcoming"
+          element={
+            <PrivateRoute>
+              <Upcoming />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/recommendations"
+          element={
+            <PrivateRoute>
+              <Recommendations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/recommendations/:genreId"
+          element={
+            <PrivateRoute>
+              <Recommendations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/actor/:id"
+          element={
+            <PrivateRoute>
+              <ActorDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/watchlist"
+          element={
+            <PrivateRoute>
+              <Watchlist />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

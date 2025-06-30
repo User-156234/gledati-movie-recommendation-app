@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { fetchUpcomingMovies,searchMovies } from '../api/tmdb';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
+import '../styles/styles.css';
 
 export default function Upcoming() {
   const [movies, setMovies] = useState([]);
@@ -50,7 +51,7 @@ export default function Upcoming() {
     };
 
     loadMovies();
-  }, [page]);
+  }, [page,search]);
 
   return (
     <div>

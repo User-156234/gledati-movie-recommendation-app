@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchTrendingMovies, searchMovies } from '../api/tmdb';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
+import '../styles/styles.css';
 
 export default function Home() {
   const [movies, setMovies] = useState([]);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/styles.css';
 
 export default function CastList({ cast }) {
   const navigate = useNavigate();

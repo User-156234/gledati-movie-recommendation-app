@@ -1,13 +1,30 @@
 .navbar {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
   background: linear-gradient(90deg, #141e30, #243b55);
   padding: 1rem;
-  gap: 2rem;
+  gap: 1rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #00ffff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease-in-out;
+  margin-left: 1rem;
+}
+
+.logout-btn:hover {
+  color: #fff;
+  transform: scale(1.05);
+}
+
 
 .navbar a {
   color: #fff;
@@ -38,4 +55,18 @@
 .navbar a.active {
   color: #00ffff;
   transform: scale(1.1);
+}
+
+/* Media Query for small screens */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+  }
+
+  .navbar a {
+    font-size: 1rem;
+  }
 }

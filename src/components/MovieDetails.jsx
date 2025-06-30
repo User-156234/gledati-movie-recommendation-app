@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchMovieDetails } from '../api/tmdb';
 import CastList from './CastList';
 import Trailer from './Trailer';
 import axios from 'axios';
+import { AuthContext } from '../auth/AuthContext';
+import '../styles/styles.css';
+import { BACKEND_URL } from '../config';
 
 export default function MovieDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [watchProviders, setWatchProviders] = useState([]);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const getDetails = async () => {
@@ -19,9 +23,10 @@ export default function MovieDetails() {
 
     const getWatchProviders = async () => {
       const res = await axios.get(
-        `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=2cb0292b03fe9b2060d5bdfc7cc0c94b`
+        `${BACKEND_URL}/tmdb/movie/${id}/providers`
       );
-      const providers = res.data.results?.IN?.flatrate || []; // IN = India; adjust if needed
+      
+      const providers = res.data.results?.IN?.flatrate || [];
       setWatchProviders(providers);
     };
 
@@ -34,6 +39,34 @@ export default function MovieDetails() {
   const trailer = movie.videos.results.find((v) => v.type === 'Trailer');
   const director = movie.credits.crew.find((crew) => crew.job === 'Director');
 
+  const handleAddToWatchlist = async (e) => {
+    e.preventDefault(); // prevent <Link> navigation
+    try {
+      const res = await fetch(`${BACKEND_URL}/watchlist`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          movieId: movie.id,
+          title: movie.title,
+          posterPath: movie.poster_path,
+          overview: movie.overview
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert('Added to watchlist');
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error adding to watchlist:', error);
+    }
+  };
+
   return (
     <div className="container details-container">
       <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
@@ -45,6 +78,7 @@ export default function MovieDetails() {
           <p>{movie.overview}</p>
           <p><strong>Release Date:</strong> {movie.release_date}</p>
           <p><strong>Rating:</strong> {movie.vote_average}</p>
+
           {director && (
             <p>
               <strong>Director:</strong>{' '}
@@ -56,6 +90,7 @@ export default function MovieDetails() {
               </span>
             </p>
           )}
+
           {watchProviders.length > 0 && (
             <div style={{ marginTop: '10px' }}>
               <strong>Available On:</strong>
@@ -71,6 +106,12 @@ export default function MovieDetails() {
                 ))}
               </div>
             </div>
+          )}
+
+          {token && (
+            <button className="watchlist-button" onClick={handleAddToWatchlist}>
+             Add to Watchlist
+            </button>
           )}
         </div>
       </div>

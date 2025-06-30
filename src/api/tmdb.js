@@ -1,52 +1,47 @@
 import axios from 'axios';
 
-const API_KEY = '2cb0292b03fe9b2060d5bdfc7cc0c94b';
-const BASE_URL = 'https://api.themoviedb.org/3';
+// ✅ Backend proxy URL
+const BASE_URL = `https://tmdb-backend-2o43.onrender.com/api/tmdb`;
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  params: { api_key: API_KEY },
 });
 
+// ✅ All routes now go through backend — no TMDB key exposed to frontend
+
 export const fetchTrendingMovies = (page = 1) => {
-  return instance.get('/trending/movie/week', { params: { page } });
+  return instance.get('/trending', { params: { page } });
 };
 
 export const searchMovies = (query, page = 1) => {
-  return instance.get('/search/movie', { params: { query, page } });
+  return instance.get('/search', { params: { query, page } });
 };
 
 export const fetchMovieDetails = (id) => {
-  return instance.get(`/movie/${id}`, {
-    params: { append_to_response: 'videos,credits' },
-  });
+  return instance.get(`/movie/${id}`);
 };
 
 export const fetchUpcomingMovies = (page = 1) => {
-  return instance.get('/movie/upcoming', { params: { page } });
+  return instance.get('/upcoming', { params: { page } });
 };
 
 export const fetchGenres = () => {
-  return instance.get('/genre/movie/list');
+  return instance.get('/genres');
 };
 
 export const fetchMoviesByGenre = (genreId, page = 1) => {
-  return instance.get('/discover/movie', {
-    params: { with_genres: genreId, page },
+  return instance.get('/discover', {
+    params: { genreId, page },
   });
 };
 
 export const fetchRepresentativeMovie = (genreId) => {
-  return instance.get('/discover/movie', {
-    params: {
-      with_genres: genreId,
-      sort_by: 'vote_average.desc',
-      'vote_count.gte': 1000,
-    },
+  return instance.get('/representative', {
+    params: { genreId },
   });
 };
 
 export const fetchActorDetails = (id) => {
-  return instance.get(`/person/${id}`);
+  return instance.get(`/actor/${id}`);
 };
 
