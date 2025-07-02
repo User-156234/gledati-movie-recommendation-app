@@ -2,11 +2,12 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // loading state during rehydration
 
-  // ✅ Load from localStorage on first render
+  // ✅ Rehydrate user from localStorage on initial load
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
@@ -15,17 +16,17 @@ const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       setToken(storedToken);
     }
+    setLoading(false); // done loading
   }, []);
 
-  // ✅ Login function
-  const login = (userData, token) => {
+  // ✅ When login is called, save to localStorage too
+  const login = (userData, authToken) => {
     setUser(userData);
-    setToken(token);
+    setToken(authToken);
     localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', authToken);
   };
 
-  // ✅ Logout function
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -35,9 +36,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthProvider;
