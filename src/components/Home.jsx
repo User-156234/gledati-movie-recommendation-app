@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchTrendingMovies, searchMovies } from '../api/tmdb';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
+import TrendingCarousel from './TrendingCarousel'; // new carousel import
 import '../styles/styles.css';
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
         setError('Failed to fetch data from TMDB.');
       } finally {
         setLoading(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll to top on page change
       }
     };
     fetchData();
@@ -34,23 +36,28 @@ export default function Home() {
     <div className="container">
       <Navbar />
 
-      <input
-        type="text"
-        placeholder="Search movies..."
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(1);
-        }}
-        className="search-bar"
-      />
+      {/* Trending Carousel only when not searching */}
+      {!search && <TrendingCarousel />}
+
+      <div className="search-section">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="search-bar"
+        />
+      </div>
 
       {loading && <p className="loading">Loading movies...</p>}
 
       {error && (
         <div className="error">
           <p>{error}</p>
-          <p className="tip">Make Sure the IP allows TMDB calls</p>
+          <p className="tip">Make sure your IP allows TMDB API calls.</p>
         </div>
       )}
 
@@ -61,6 +68,7 @@ export default function Home() {
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
+
           <div className="pagination">
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}

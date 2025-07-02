@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchMovieDetails } from '../api/tmdb';
 import CastList from './CastList';
 import Trailer from './Trailer';
@@ -11,6 +11,8 @@ import { BACKEND_URL } from '../config';
 export default function MovieDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const trailerRef = useRef(null);
   const [movie, setMovie] = useState(null);
   const [watchProviders, setWatchProviders] = useState([]);
   const { token } = useContext(AuthContext);
@@ -22,10 +24,7 @@ export default function MovieDetails() {
     };
 
     const getWatchProviders = async () => {
-      const res = await axios.get(
-        `${BACKEND_URL}/tmdb/movie/${id}/providers`
-      );
-      
+      const res = await axios.get(`${BACKEND_URL}/tmdb/movie/${id}/providers`);
       const providers = res.data.results?.IN?.flatrate || [];
       setWatchProviders(providers);
     };
@@ -34,13 +33,24 @@ export default function MovieDetails() {
     getWatchProviders();
   }, [id]);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const scrollToTrailer = queryParams.get('playTrailer');
+
+    if (scrollToTrailer && trailerRef.current) {
+      setTimeout(() => {
+        trailerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, 800);
+    }
+  }, [location.search, movie]);
+
   if (!movie) return <div className="container">Loading...</div>;
 
   const trailer = movie.videos.results.find((v) => v.type === 'Trailer');
   const director = movie.credits.crew.find((crew) => crew.job === 'Director');
 
   const handleAddToWatchlist = async (e) => {
-    e.preventDefault(); // prevent <Link> navigation
+    e.preventDefault();
     try {
       const res = await fetch(`${BACKEND_URL}/watchlist`, {
         method: 'POST',
@@ -110,7 +120,7 @@ export default function MovieDetails() {
 
           {token && (
             <button className="watchlist-button" onClick={handleAddToWatchlist}>
-             Add to Watchlist
+              Add to Watchlist
             </button>
           )}
         </div>
@@ -121,7 +131,7 @@ export default function MovieDetails() {
       </div>
 
       {trailer && (
-        <div className="trailer">
+        <div className="trailer" ref={trailerRef}>
           <Trailer videoKey={trailer.key} />
         </div>
       )}

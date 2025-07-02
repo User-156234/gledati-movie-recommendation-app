@@ -119,6 +119,61 @@ body {
     background-color: #4caf50;
   }
   
+
+  .ott-carousel {
+    padding: 2rem;
+  }
+  
+  .carousel-title {
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .ott-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+  }
+  
+  .ott-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  .ott-scroll-container {
+    scrollbar-width: none;
+  }
+  
+  .ott-thumb {
+    flex: 0 0 auto;
+    width: 300px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .ott-thumb img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+  }
+  
+  .ott-thumb:hover img {
+    transform: scale(1.05);
+  }
+  
+  .ott-title {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    text-align: center;
+  }
+  
   
   
   
