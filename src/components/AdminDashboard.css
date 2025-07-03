@@ -1,0 +1,43 @@
+.admin-dashboard {
+    padding: 2rem;
+    color: #fff;
+  }
+  
+  .add-download-form {
+    background: #1f1f1f;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .add-download-form input {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    width: 100%;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .add-download-form button {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: #00ffff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .users-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .users-section li {
+    background: #292929;
+    margin: 0.3rem 0;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+  

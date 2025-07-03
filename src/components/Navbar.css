@@ -11,13 +11,45 @@
   position: relative;
   z-index: 10;
 }
-
-.auth-links{
+.auth-links {
   margin-left: auto;
-display: flex;
-align-items: center;
-gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem; /* increased from 0.5rem if needed */
 }
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: bold;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.profile-avatar {
+  width: 45px !important;
+  height: 45px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+
+.profile-avatar-container:hover .profile-avatar {
+  transform: scale(1.05);
+}
+
 
 .icon {
   width: 24px;
@@ -32,7 +64,6 @@ gap: 1rem;
   font-size: 1.3rem;
   color: #fff;
   cursor: pointer;
-  margin-right: 1rem;
   transition: transform 0.2s;
   display: flex;
   align-items: center;
@@ -94,7 +125,6 @@ gap: 1rem;
 
 /* Dropdown */
 .dropdown-container {
-  margin-left: auto;
   display: flex;
   align-items: center;
 }
@@ -155,43 +185,48 @@ gap: 1rem;
   color: #ff4d4d;
 }
 
-/* 🔁 Responsive */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
-    padding: 1rem;
+    align-items: stretch;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
   }
 
   .nav-links-center {
     position: static;
     transform: none;
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    flex-wrap: wrap;
-    gap: 1rem;
     margin-bottom: 0.5rem;
+    gap: 1rem;
   }
 
-  .auth-links{
-    margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  }
-  .dropdown-container {
-    margin-left: 0;
-    width: 100%;
+  .auth-links {
+    flex-direction: row;
     justify-content: center;
+    width: 100%;
+    gap: 1rem;
     margin-top: 0.5rem;
   }
 
-  .dropdown-menu {
-    left: 50%;
-    transform: translateX(-50%);
-    top: 110%;
+  .search-icon-button {
+    margin: 0;
+    padding: 0.3rem;
   }
 
   .dropdown-toggle {
-    justify-content: center;
+    font-size: 1rem;
+    gap: 0.3rem;
+  }
+
+  .profile-avatar {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .profile-avatar-container {
+    margin-left: 0;
   }
 }

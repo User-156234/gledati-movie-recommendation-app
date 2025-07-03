@@ -37,22 +37,35 @@ export default function Navbar({ onSearchToggle }) {
       <div className="auth-links">
         {/* 🔍 Search Icon */}
         <button className="search-icon-button" onClick={onSearchToggle} title="Search">
-  <img src={searchIcon} alt="Search" className="icon" />
-</button>
+          <img src={searchIcon} alt="Search" className="icon" />
+        </button>
 
         {user ? (
-          <div className="dropdown" ref={dropdownRef}>
-            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="dropdown-toggle">
-              <img src={bookmarkIcon} alt="Watchlist" className="icon" />
-              <span>Watchlist ▾</span>
-            </button>
-            {dropdownOpen && (
-              <div className="dropdown-menu">
-                <NavLink to="/watchlist" className="dropdown-item">My Watchlist</NavLink>
-                <button onClick={handleLogout} className="dropdown-item logout">Logout</button>
-              </div>
-            )}
-          </div>
+          <>
+            {/* Watchlist Dropdown */}
+            <div className="dropdown" ref={dropdownRef}>
+              <button onClick={() => setDropdownOpen(!dropdownOpen)} className="dropdown-toggle">
+                <img src={bookmarkIcon} alt="Watchlist" className="icon" />
+                <span>Watchlist ▾</span>
+              </button>
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <NavLink to="/watchlist" className="dropdown-item">My Watchlist</NavLink>
+                  <button onClick={handleLogout} className="dropdown-item logout">Logout</button>
+                </div>
+              )}
+            </div>
+
+            {/* 👤 Profile Avatar */}
+            <div className="profile-avatar-container" onClick={() => navigate('/profile')}>
+              <img
+                src={user.profilePic || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
+                alt="Profile"
+                className="profile-avatar"
+                title="Profile"
+              />
+            </div>
+          </>
         ) : (
           <>
             <NavLink to="/signin" className={({ isActive }) => (isActive ? 'active' : '')}>Sign In</NavLink>

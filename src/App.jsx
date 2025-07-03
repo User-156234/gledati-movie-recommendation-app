@@ -9,6 +9,7 @@ import SignIn from './auth/SignIn';
 import Register from './auth/Register';
 import PrivateRoute from './auth/PrivateRoute';
 import Watchlist from './pages/Watchlist';
+import Profile from './components/Profile';
 
 export default function App() {
 
@@ -76,6 +77,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Watchlist />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           }
         />
