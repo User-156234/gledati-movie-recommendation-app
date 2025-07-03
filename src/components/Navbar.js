@@ -3,17 +3,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import './Navbar.css';
 import bookmarkIcon from '../assets/bookmark-icon.ico';
+import searchIcon from '../assets/search.ico';
 
-export default function Navbar() {
+export default function Navbar({ onSearchToggle }) {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/signin');
-  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -25,6 +21,11 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/signin');
+  };
+
   return (
     <nav className="navbar">
       <div className="nav-links-center">
@@ -33,8 +34,13 @@ export default function Navbar() {
         <NavLink to="/recommendations" className={({ isActive }) => (isActive ? 'active' : '')}>Recommendations</NavLink>
       </div>
 
-      {user ? (
-        <div className="dropdown-container">
+      <div className="auth-links">
+        {/* 🔍 Search Icon */}
+        <button className="search-icon-button" onClick={onSearchToggle} title="Search">
+  <img src={searchIcon} alt="Search" className="icon" />
+</button>
+
+        {user ? (
           <div className="dropdown" ref={dropdownRef}>
             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="dropdown-toggle">
               <img src={bookmarkIcon} alt="Watchlist" className="icon" />
@@ -47,13 +53,13 @@ export default function Navbar() {
               </div>
             )}
           </div>
-        </div>
-      ) : (
-        <div className="auth-links">
-          <NavLink to="/signin" className={({ isActive }) => (isActive ? 'active' : '')}>Sign In</NavLink>
-          <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>Register</NavLink>
-        </div>
-      )}
+        ) : (
+          <>
+            <NavLink to="/signin" className={({ isActive }) => (isActive ? 'active' : '')}>Sign In</NavLink>
+            <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>Register</NavLink>
+          </>
+        )}
+      </div>
     </nav>
   );
 }

@@ -12,6 +12,28 @@
   z-index: 10;
 }
 
+.icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+
+.search-icon-button {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: transform 0.2s;
+}
+
+.search-icon-button:hover {
+  transform: scale(1.2);
+}
+
+
 .nav-links-center {
   position: absolute;
   left: 50%;
