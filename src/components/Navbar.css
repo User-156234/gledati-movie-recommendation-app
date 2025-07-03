@@ -12,6 +12,13 @@
   z-index: 10;
 }
 
+.auth-links{
+  margin-left: auto;
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+
 .icon {
   width: 24px;
   height: 24px;
@@ -27,7 +34,12 @@
   cursor: pointer;
   margin-right: 1rem;
   transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
 }
+
 
 .search-icon-button:hover {
   transform: scale(1.2);
@@ -160,7 +172,12 @@
     margin-bottom: 0.5rem;
   }
 
-  .auth-links,
+  .auth-links{
+    margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  }
   .dropdown-container {
     margin-left: 0;
     width: 100%;
