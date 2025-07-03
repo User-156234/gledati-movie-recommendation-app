@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchMovieDetails } from '../api/tmdb';
-import CastList from './CastList';
 import Trailer from './Trailer';
 import axios from 'axios';
 import { AuthContext } from '../auth/AuthContext';
-import '../styles/styles.css';
+import './MovieDetails.css';
 import { BACKEND_URL } from '../config';
 
 export default function MovieDetails() {
@@ -112,31 +111,54 @@ export default function MovieDetails() {
   const director = movie.credits.crew.find((crew) => crew.job === 'Director');
 
   return (
-    <div className="container details-container">
+    <div className="details-container">
       <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
 
-      <div className="details-top">
-        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.title} poster`} />
-        <div className="movie-info">
-          <h1>{movie.title}</h1>
-          <p>{movie.overview}</p>
-          <p><strong>Release Date:</strong> {movie.release_date}</p>
-          <p><strong>Rating:</strong> {movie.vote_average}</p>
+      <div
+        className="details-hero"
+        style={{
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path})`,
+        }}
+      >
+        <div className="details-overlay">
+          <h1 className="details-title">{movie.title}</h1>
+          <p className="details-tagline">{movie.overview?.slice(0, 300)}...</p>
 
-          {director && (
-            <p>
-              <strong>Director:</strong>{' '}
-              <span
-                style={{ color: '#ff4757', cursor: 'pointer' }}
-                onClick={() => navigate(`/actor/${director.id}`)}
-              >
-                {director.name}
-              </span>
-            </p>
+          {trailer && (
+            <button
+              className="trailer-button"
+              onClick={() => {
+                const searchParams = new URLSearchParams(location.search);
+                searchParams.set('playTrailer', 'true');
+                navigate({ search: searchParams.toString() });
+              }}
+            >
+              ▶ Watch Trailer
+            </button>
           )}
+        </div>
+      </div>
+
+      <div className="details-top">
+        <div className="movie-main-info">
+          <div className="meta-data">
+            <p><strong>Rating:</strong> {movie.vote_average}</p>
+            <p><strong>Release Date:</strong> {movie.release_date}</p>
+            {director && (
+              <p>
+                <strong>Director:</strong>{' '}
+                <span
+                  style={{ color: '#ff4757', cursor: 'pointer' }}
+                  onClick={() => navigate(`/actor/${director.id}`)}
+                >
+                  {director.name}
+                </span>
+              </p>
+            )}
+          </div>
 
           {watchProviders.length > 0 && (
-            <div style={{ marginTop: '10px' }}>
+            <div className="watch-providers">
               <strong>Available On:</strong>
               <div style={{ display: 'flex', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
                 {watchProviders.map((provider) => (
@@ -145,7 +167,6 @@ export default function MovieDetails() {
                     src={`https://image.tmdb.org/t/p/w92${provider.logo_path}`}
                     alt={provider.provider_name}
                     title={provider.provider_name}
-                    style={{ width: '50px', height: '50px', borderRadius: '8px', background: '#fff' }}
                   />
                 ))}
               </div>
@@ -157,49 +178,58 @@ export default function MovieDetails() {
               Add to Watchlist
             </button>
           )}
-
-          {downloadLink && (
-            <div style={{ marginTop: '1rem' }}>
-              <a
-                href={downloadLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="watchlist-button"
-                style={{ backgroundColor: '#00ffcc', color: '#000', fontWeight: 'bold' }}
-              >
-                📥 Download Movie
-              </a>
-            </div>
-          )}
-
-          {user?.role === 'admin' && (
-            <div style={{ marginTop: '1rem' }}>
-              <input
-                type="text"
-                placeholder="Paste new download link"
-                value={newLink}
-                onChange={(e) => setNewLink(e.target.value)}
-                style={{ padding: '0.4rem', width: '70%' }}
-              />
-              <button
-                onClick={handleSaveLink}
-                className="watchlist-button"
-                style={{ marginLeft: '0.5rem' }}
-              >
-                Save Link
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
+      {/* Cast List */}
       <div className="cast-scroll">
-        <CastList cast={movie.credits.cast.slice(0, 8)} />
+  <h2 style={{ marginBottom: '16px' }}>Cast</h2>
+  <div className="cast-list">
+    {movie.credits.cast.slice(0, 8).map((actor) => (
+      <div
+        className="cast-card"
+        key={actor.id}
+        onClick={() => navigate(`/actor/${actor.id}`)}
+        style={{ cursor: 'pointer' }}
+      >
+        <img
+          src={
+            actor.profile_path
+              ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+              : '/default-profile.png'
+          }
+          alt={actor.name}
+        />
+        <span>{actor.name}</span>
       </div>
+    ))}
+  </div>
+</div>
+
 
       {trailer && (
         <div className="trailer" ref={trailerRef}>
           <Trailer videoKey={trailer.key} />
+        </div>
+      )}
+
+      {downloadLink && (
+        <div className="download-link-section">
+          <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+            📥 Download Movie
+          </a>
+        </div>
+      )}
+
+      {user?.role === 'admin' && (
+        <div className="admin-input">
+          <input
+            type="text"
+            placeholder="Paste new download link"
+            value={newLink}
+            onChange={(e) => setNewLink(e.target.value)}
+          />
+          <button onClick={handleSaveLink}>Save Link</button>
         </div>
       )}
     </div>
