@@ -216,7 +216,7 @@ export default function MovieDetails() {
       {downloadLink && (
         <div className="download-link-section">
           <a href={downloadLink} target="_blank" rel="noopener noreferrer">
-            📥 Download Movie
+             Download Movie
           </a>
         </div>
       )}
