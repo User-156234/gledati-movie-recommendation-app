@@ -9,6 +9,7 @@
   cursor: pointer;
   text-align: center;
   transition: transform 0.3s ease;
+  margin: auto;
 }
 
 .genre-card:hover {
@@ -20,4 +21,35 @@
   height: 220px;
   object-fit: cover;
   border-radius: 10px;
+}
+
+/* Existing styles assumed here */
+
+/* Responsive wrapper for the search bar */
+.language-search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+@media (min-width: 768px) {
+  .language-search-wrapper {
+    justify-content: flex-end;
+    padding-right: 2rem;
+  }
+}
+
+.language-search-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.language-search-input:focus {
+  border-color: #007bff;
 }

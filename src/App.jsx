@@ -39,6 +39,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/admin-dashboard"
           element={
@@ -81,6 +82,14 @@ export default function App() {
         />
         <Route
           path="/recommendations/:genreId"
+          element={
+            <PrivateRoute>
+              <Recommendations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/recommendations/lang/:langCode"
           element={
             <PrivateRoute>
               <Recommendations />

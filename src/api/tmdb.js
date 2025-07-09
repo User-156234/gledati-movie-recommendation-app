@@ -45,3 +45,16 @@ export const fetchActorDetails = (id) => {
   return instance.get(`/actor/${id}`);
 };
 
+// 🌐 Get all supported languages
+export const fetchLanguages = () => {
+  return instance.get('/languages');
+};
+
+// 🎬 Get movies filtered by language
+export const fetchMoviesByLanguage = (langCode, page = 1) => {
+  return instance.get('/language-movies', {
+    params: { langCode, page },
+  });
+};
+
+
