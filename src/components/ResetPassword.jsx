@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../config';
 
 export default function ResetPassword() {
   const { token } = useParams();
+  const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
 
@@ -13,6 +14,9 @@ export default function ResetPassword() {
     try {
       const res = await axios.post(`${BACKEND_URL}/auth/reset-password`, { token, newPassword });
       setMessage(res.data.message);
+      setTimeout(() => {
+        navigate('/signin'); // Redirect to Sign In after 2 seconds
+      }, 2000);
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error resetting password');
     }
