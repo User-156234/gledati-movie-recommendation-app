@@ -12,6 +12,8 @@ import Watchlist from './pages/Watchlist';
 import Profile from './components/Profile';
 import AdminDashboard from './components/AdminDashboard';
 import EditProfile from './pages/EditProfile';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 export default function App() {
 
@@ -24,6 +26,9 @@ export default function App() {
         {/* ✅ Public Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/reset-password/:token" element={<ResetPassword />} />
+
 
         {/* ✅ Protected Routes */}
         <Route

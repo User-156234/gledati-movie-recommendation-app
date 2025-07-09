@@ -62,6 +62,10 @@ export default function SignIn() {
           Don’t have an account?{' '}
           <span onClick={() => navigate('/register')} style={styles.link}>Register</span>
         </p>
+        <p style={{ textAlign: 'center' }}>
+  <a href="/forgot-password" style={{ color: '#6b8efb' }}>Forgot Password?</a>
+</p>
+
       </div>
     </div>
   );
