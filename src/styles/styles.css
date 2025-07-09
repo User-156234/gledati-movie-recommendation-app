@@ -303,6 +303,18 @@ body {
   font-weight: bold;
 }
 
+@media (max-width: 768px) {
+  .watchlist-btn {
+    position: static; /* Remove absolute for mobile */
+    margin-top: 8px;
+    align-self: stretch;
+  }
+
+  .movie-card div {
+    gap: 6px;
+  }
+}
+
 /* Responsive layout */
 @media (max-width: 768px) {
   .actor-details {

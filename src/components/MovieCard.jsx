@@ -12,7 +12,6 @@ export default function MovieCard({ movie }) {
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : '/fp.jpg';
 
-  // ✅ Check if movie already in watchlist
   useEffect(() => {
     const checkWatchlist = async () => {
       if (!user) return;
@@ -66,22 +65,18 @@ export default function MovieCard({ movie }) {
     <div className="movie-card-wrapper">
       <Link to={`/movie/${movie.id}`} className="movie-card">
         <img src={imageUrl} alt={movie.title || 'Movie Poster'} loading="lazy" />
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: '1rem' }}>{movie.title}</h3>
-            {user && (
-              <button
-                className={`watchlist-btn ${added ? 'added' : ''}`}
-                onClick={addToWatchlist}
-                disabled={added}
-              >
-                {added ? 'Added' : '+ Watchlist'}
-              </button>
-            )}
-          </div>
-          <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: '#ccc' }}>
-            {movie.release_date}
-          </p>
+        <div className="movie-card-info">
+          <h3 className="movie-title">{movie.title}</h3>
+          <p className="release-date">{movie.release_date}</p>
+          {user && (
+            <button
+              className={`watchlist-btn ${added ? 'added' : ''}`}
+              onClick={addToWatchlist}
+              disabled={added}
+            >
+              {added ? 'Added' : '+ Watchlist'}
+            </button>
+          )}
         </div>
       </Link>
     </div>
