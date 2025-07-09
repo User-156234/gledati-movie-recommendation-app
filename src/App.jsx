@@ -10,6 +10,8 @@ import Register from './auth/Register';
 import PrivateRoute from './auth/PrivateRoute';
 import Watchlist from './pages/Watchlist';
 import Profile from './components/Profile';
+import AdminDashboard from './components/AdminDashboard';
+import EditProfile from './pages/EditProfile';
 
 export default function App() {
 
@@ -29,6 +31,22 @@ export default function App() {
           element={
             <PrivateRoute>
               <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <PrivateRoute>
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <PrivateRoute>
+              <EditProfile />
             </PrivateRoute>
           }
         />
