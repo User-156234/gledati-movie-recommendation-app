@@ -50,10 +50,15 @@ export default function EditProfile() {
     <div className="edit-profile-page">
       <h2>Edit Profile</h2>
       <label>Name:</label>
-      <input value={username} onChange={(e) => setName(e.target.value)} />
+      
+      <input type='text' value={username} onChange={(e) => setName(e.target.value)} />
 
       <label>Profile Picture:</label>
-      <input type="file" onChange={(e) => setProfilePic(e.target.files[0])} />
+<label className="custom-file-upload">
+  <input type="file" onChange={(e) => setProfilePic(e.target.files[0])} />
+  Upload Image
+</label>
+
 
       <hr />
       <h3>Change Password (Optional)</h3>
