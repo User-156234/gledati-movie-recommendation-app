@@ -15,8 +15,9 @@ export default function MovieDetails() {
 
   const [movie, setMovie] = useState(null);
   const [watchProviders, setWatchProviders] = useState([]);
-  const [downloadLink, setDownloadLink] = useState('');
+  const [downloadLinks, setDownloadLinks] = useState({});
   const [newLink, setNewLink] = useState('');
+  const [newQuality, setNewQuality] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const { user, token } = useContext(AuthContext);
@@ -32,10 +33,10 @@ export default function MovieDetails() {
         setWatchProviders(providers);
 
         const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
-        setDownloadLink(linkRes.data.downloadLink || '');
+        setDownloadLinks(linkRes.data.downloadLinks || {});
       } catch (err) {
         console.error('Error loading movie details:', err);
-        setDownloadLink('');
+        setDownloadLinks({});
       } finally {
         setIsLoading(false);
       }
@@ -90,6 +91,7 @@ export default function MovieDetails() {
           movieId: movie.id,
           title: movie.title,
           downloadLink: newLink,
+          quality: newQuality,
         },
         {
           headers: {
@@ -97,11 +99,45 @@ export default function MovieDetails() {
           },
         }
       );
-      setDownloadLink(newLink);
+      setDownloadLinks({ ...downloadLinks, [newQuality]: newLink });
       setNewLink('');
+      setNewQuality('');
       alert('Download link saved!');
     } catch (err) {
       alert('Error saving download link');
+    }
+  };
+
+  const handleDeleteLink = async (qualityToDelete) => {
+    try {
+      await axios.delete(`${BACKEND_URL}/download/admin/movie-download/${id}/${qualityToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const updated = { ...downloadLinks };
+      delete updated[qualityToDelete];
+      setDownloadLinks(updated);
+      alert('Link deleted successfully');
+    } catch (err) {
+      alert('Failed to delete link');
+    }
+  };
+
+  const handleUpdateLink = async (quality) => {
+    try {
+      await axios.put(
+        `${BACKEND_URL}/download/admin/movie-download/${id}/${quality}`,
+        { newUrl: downloadLinks[quality] },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert('Link updated successfully');
+    } catch (err) {
+      alert('Failed to update link');
     }
   };
 
@@ -183,44 +219,75 @@ export default function MovieDetails() {
 
       {/* Cast List */}
       <div className="cast-scroll">
-  <h2 style={{ marginBottom: '16px' }}>Cast</h2>
-  <div className="cast-list">
-    {movie.credits.cast.slice(0, 8).map((actor) => (
-      <div
-        className="cast-card"
-        key={actor.id}
-        onClick={() => navigate(`/actor/${actor.id}`)}
-        style={{ cursor: 'pointer' }}
-      >
-        <img
-          src={
-            actor.profile_path
-              ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-              : '/default-profile.png'
-          }
-          alt={actor.name}
-        />
-        <span>{actor.name}</span>
+        <h2 style={{ marginBottom: '16px' }}>Cast</h2>
+        <div className="cast-list">
+          {movie.credits.cast.slice(0, 8).map((actor) => (
+            <div
+              className="cast-card"
+              key={actor.id}
+              onClick={() => navigate(`/actor/${actor.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img
+                src={
+                  actor.profile_path
+                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                    : '/default-profile.png'
+                }
+                alt={actor.name}
+              />
+              <span>{actor.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-</div>
 
-
+      {/* Trailer */}
       {trailer && (
         <div className="trailer" ref={trailerRef}>
           <Trailer videoKey={trailer.key} />
         </div>
       )}
 
-      {downloadLink && (
+      {/* Download Links */}
+      {Object.keys(downloadLinks).length > 0 && (
         <div className="download-link-section">
-          <a href={downloadLink} target="_blank" rel="noopener noreferrer">
-             Download Movie
-          </a>
+          <h3>Download Links</h3>
+          {Object.entries(downloadLinks).map(([quality, url]) => (
+            <div key={quality} style={{ marginBottom: '10px' }}>
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {quality} Download
+              </a>
+              {user?.role === 'admin' && (
+                <>
+                  <input
+                    type="text"
+                    value={downloadLinks[quality]}
+                    onChange={(e) =>
+                      setDownloadLinks({ ...downloadLinks, [quality]: e.target.value })
+                    }
+                    style={{ marginLeft: '10px', width: '300px' }}
+                  />
+                  <button
+                    onClick={() => handleUpdateLink(quality)}
+                    style={{ marginLeft: '8px' }}
+                  >
+                    💾
+                  </button>
+                  <button
+                    onClick={() => handleDeleteLink(quality)}
+                    style={{ marginLeft: '8px', color: 'red', cursor: 'pointer' }}
+                  >
+                    ❌
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
+      {/* Admin input for adding new download links */}
       {user?.role === 'admin' && (
         <div className="admin-input">
           <input
@@ -228,6 +295,12 @@ export default function MovieDetails() {
             placeholder="Paste new download link"
             value={newLink}
             onChange={(e) => setNewLink(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Quality (e.g. 1080p, 720p)"
+            value={newQuality}
+            onChange={(e) => setNewQuality(e.target.value)}
           />
           <button onClick={handleSaveLink}>Save Link</button>
         </div>
