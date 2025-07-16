@@ -11,7 +11,6 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showSearchBar, setShowSearchBar] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,27 +34,16 @@ export default function Home() {
 
   return (
     <div className="container">
-      <Navbar onSearchToggle={() => setShowSearchBar((prev) => !prev)} />
-
-
-      {showSearchBar && (
-        <div className="search-section">
-          <input
-            type="text"
-            placeholder="Search movies..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="search-bar"
-          />
-        </div>
-      )}
+      <Navbar
+        searchQuery={search}
+        setSearchQuery={(value) => {
+          setSearch(value);
+          setPage(1);
+        }}
+        handleSearch={() => setPage(1)}
+      />
 
       {!search && <TrendingCarousel />}
-
-      
 
       {loading && <p className="loading">Loading movies...</p>}
 

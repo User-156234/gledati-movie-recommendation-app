@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { fetchUpcomingMovies,searchMovies } from '../api/tmdb';
+import { fetchUpcomingMovies } from '../api/tmdb';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import '../styles/styles.css';
@@ -9,7 +9,6 @@ export default function Upcoming() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
-  const [search, setSearch]=useState(null);
 
   const observer = useRef();
 
@@ -30,9 +29,7 @@ export default function Upcoming() {
     const loadMovies = async () => {
       try {
         setError(null);
-        const res = search
-                  ? await searchMovies(search, page)
-                  : await fetchUpcomingMovies(page);
+        const res =  await fetchUpcomingMovies(page);
                 setMovies(res.data.results);
         
         const today = new Date();
@@ -51,22 +48,13 @@ export default function Upcoming() {
     };
 
     loadMovies();
-  }, [page,search]);
+  }, [page]);
 
   return (
     <div>
       
       <div className="container"><Navbar />
-      <input
-        type="text"
-        placeholder="Search movies..."
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(1);
-        }}
-        className="search-bar"
-      />
+      
 
         {error && <div className="error">{error}</div>}
 
