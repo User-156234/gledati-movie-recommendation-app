@@ -11,11 +11,12 @@
   position: relative;
   z-index: 10;
 }
+
 .auth-links {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 0.1rem; /* increased from 0.5rem if needed */
+  gap: 0.1rem;
 }
 
 .dropdown-toggle {
@@ -45,11 +46,9 @@
   border: 2px solid #fff;
 }
 
-
 .profile-avatar-container:hover .profile-avatar {
   transform: scale(1.05);
 }
-
 
 .icon {
   width: 24px;
@@ -57,11 +56,10 @@
   object-fit: contain;
 }
 
-
 .search-icon-button {
   background: none;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   color: #fff;
   cursor: pointer;
   transition: transform 0.2s;
@@ -69,13 +67,12 @@
   align-items: center;
   justify-content: center;
   padding: 0.3rem;
+  margin: 0.6rem;
 }
-
 
 .search-icon-button:hover {
   transform: scale(1.2);
 }
-
 
 .nav-links-center {
   position: absolute;
@@ -85,7 +82,7 @@
   gap: 1.5rem;
 }
 
-.navbar a {
+.nav-links-center a {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -94,24 +91,24 @@
   transition: all 0.3s ease-in-out;
 }
 
-.navbar a::after {
+.nav-links-center a::after {
   content: '';
   position: absolute;
   width: 0%;
   height: 2px;
-  bottom: -5px;
+  bottom: -1.5px;
   left: 0;
   background-color: #00ffff;
   transition: width 0.3s;
 }
 
-.navbar a:hover::after,
-.navbar a.active::after {
+.nav-links-center a:hover::after,
+.nav-links-center a.active::after {
   width: 100%;
 }
 
-.navbar a:hover,
-.navbar a.active {
+.nav-links-center a:hover,
+.nav-links-center a.active {
   color: #00ffff;
   transform: scale(1.1);
 }
@@ -156,8 +153,8 @@
   position: absolute;
   right: 0;
   top: 120%;
-  background-color: #1c1c1c;
-  border: 1px solid #333;
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -169,20 +166,34 @@
 .dropdown-item {
   padding: 0.75rem 1rem;
   text-align: left;
-  color: #fff;
+  color: #e0e7ff;
   background: none;
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-family: 'Georgia, serif';
+  vertical-align: middle;
+  line-height: 1.2;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  display: block;
+  text-decoration: none; /* Remove any default underlining from NavLink */
 }
 
-.dropdown-item:hover {
-  background-color: #333;
+.dropdown-item.active::before {
+  content: '•'; /* Small dot as cursor-pointing effect */
+  color: #00d4ff; /* Matching the hover color for consistency */
+  margin-right: 0.5rem;
 }
 
 .logout {
-  color: #ff4d4d;
+  color: #ff6666;
+}
+
+.logout:hover {
+  background: none;
+  color: #ff9999;
+  transition: none;
 }
 
 @media (max-width: 768px) {
@@ -212,7 +223,7 @@
   }
 
   .search-icon-button {
-    margin: 0 !important;
+    margin: 1rem !important;
     padding: 0.3rem;
   }
 
@@ -227,6 +238,39 @@
   }
 
   .profile-avatar-container {
-    margin-left: 0;
+    margin-left: 0.5rem;
   }
+
+  .logo-container {
+    order: -1;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+  }
+  
+  .logo {
+    height: 58px;
+    width: auto;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.logo {
+  height: 58px;
+  width: auto;
+}
+
+.logo-text {
+  margin-left: 10px;
+  color: #e0e7ff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: 'Georgia, serif';
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
 }

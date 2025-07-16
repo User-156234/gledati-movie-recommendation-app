@@ -2,8 +2,8 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import './Navbar.css';
-import bookmarkIcon from '../assets/bookmark-icon.ico';
 import searchIcon from '../assets/search.ico';
+import gledati from '../assets/gledati.png';
 
 export default function Navbar({ onSearchToggle }) {
   const { user, logout } = useContext(AuthContext);
@@ -28,6 +28,10 @@ export default function Navbar({ onSearchToggle }) {
 
   return (
     <nav className="navbar">
+      <div className="logo-container" onClick={() => navigate('/home')}>
+        <img src={gledati} alt="Logo" className="logo" />
+      </div>
+
       <div className="nav-links-center">
         <NavLink to="/home" end className={({ isActive }) => (isActive ? 'active' : '')}>Trending</NavLink>
         <NavLink to="/upcoming" className={({ isActive }) => (isActive ? 'active' : '')}>Upcoming</NavLink>
@@ -35,35 +39,27 @@ export default function Navbar({ onSearchToggle }) {
       </div>
 
       <div className="auth-links">
-        {/* 🔍 Search Icon */}
         <button className="search-icon-button" onClick={onSearchToggle} title="Search">
           <img src={searchIcon} alt="Search" className="icon" />
         </button>
 
         {user ? (
           <>
-            {/* Watchlist Dropdown */}
-            <div className="dropdown" ref={dropdownRef}>
-              <button onClick={() => setDropdownOpen(!dropdownOpen)} className="dropdown-toggle">
-                <img src={bookmarkIcon} alt="Watchlist" className="icon" />
-                <span>Watchlist ▾</span>
-              </button>
-              {dropdownOpen && (
-                <div className="dropdown-menu">
-                  <NavLink to="/watchlist" className="dropdown-item">My Watchlist</NavLink>
-                  <button onClick={handleLogout} className="dropdown-item logout">Logout</button>
-                </div>
-              )}
-            </div>
-
-            {/* 👤 Profile Avatar */}
-            <div className="profile-avatar-container" onClick={() => navigate('/profile')}>
+            <div className="profile-avatar-container" ref={dropdownRef}>
               <img
                 src={user.profilePic || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
                 alt="Profile"
                 className="profile-avatar"
                 title="Profile"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               />
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <NavLink to="/profile" className="dropdown-item">Profile</NavLink>
+                  <NavLink to="/watchlist" className="dropdown-item">Watchlist</NavLink>
+                  <button onClick={handleLogout} className="dropdown-item logout">Logout</button>
+                </div>
+              )}
             </div>
           </>
         ) : (
