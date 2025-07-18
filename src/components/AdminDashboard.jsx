@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [roleFilter, setRoleFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [mailSending, setMailSending] = useState(false);
 
   const { user, token } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -22,7 +24,6 @@ const AdminDashboard = () => {
       navigate('/home');
       return;
     }
-
     const fetchUsers = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/admin/users`, {
@@ -34,7 +35,6 @@ const AdminDashboard = () => {
         alert('Failed to fetch users');
       }
     };
-
     fetchUsers();
   }, [user, token, navigate]);
 
@@ -66,6 +66,53 @@ const AdminDashboard = () => {
     currentPage * usersPerPage
   );
 
+  const allChecked =
+    paginatedUsers.length > 0 &&
+    paginatedUsers.every((u) => selectedUserIds.includes(u._id));
+  const someChecked =
+    paginatedUsers.some((u) => selectedUserIds.includes(u._id)) && !allChecked;
+
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedUserIds((prev) => [
+        ...prev,
+        ...paginatedUsers
+          .filter((u) => !prev.includes(u._id))
+          .map((u) => u._id)
+      ]);
+    } else {
+      setSelectedUserIds((prev) =>
+        prev.filter((id) => !paginatedUsers.map((u) => u._id).includes(id))
+      );
+    }
+  };
+
+  // New: Send mail with prompts & backend call
+  const handleSendMail = async (userIds) => {
+    if (mailSending || userIds.length === 0) return;
+    if (!window.confirm(`Send predefined email to ${userIds.length} users?`)) return;
+  
+    setMailSending(true);
+  
+    try {
+      const res = await axios.post(
+        `${BACKEND_URL}/admin/send-mail`,
+        { userIds }, // ONLY userIds, no subject/message
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(`Success! ${res.data.count} emails sent.`);
+      setSelectedUserIds([]);
+    } catch (err) {
+      alert(
+        err.response?.data?.message
+          ? `Failed: ${err.response.data.message}`
+          : "Mail sending failed!"
+      );
+    }
+    setMailSending(false);
+  };
+  
+
   const exportToCSV = () => {
     const csv = [
       ['Name', 'Email', 'Role'],
@@ -82,34 +129,45 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h2>Admin Dashboard</h2>
-
-      <div className="controls">
-        <input
-          type="text"
-          placeholder="Search by name or email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-        <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
-          <option value="">All Roles</option>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-
-        <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
-          <option value="username">Sort by Name</option>
-          <option value="email">Sort by Email</option>
-          <option value="role">Sort by Role</option>
-        </select>
-
-        <button onClick={exportToCSV} className="export-btn">Export CSV</button>
+      {/* Top controls row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div className="controls">
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+            <option value="">All Roles</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+            <option value="username">Sort by Name</option>
+            <option value="email">Sort by Email</option>
+            <option value="role">Sort by Role</option>
+          </select>
+          <button onClick={exportToCSV} className="export-btn">
+            Export CSV
+          </button>
+        </div>
+        <div>
+          <button
+            className="send-mail-btn"
+            style={{ float: 'right' }}
+            disabled={selectedUserIds.length === 0 || mailSending}
+            onClick={() => handleSendMail(selectedUserIds)}
+            title={selectedUserIds.length === 0 ? 'Select users first' : ''}
+          >
+            {mailSending ? "Sending..." : "Send Mail"}
+          </button>
+        </div>
       </div>
 
+      {/* Table and paging */}
       <div className="users-section">
         <h3>Registered Users with Roles ({filteredUsers.length})</h3>
-
         {filteredUsers.length === 0 ? (
           <p>No matching users found.</p>
         ) : (
@@ -117,6 +175,16 @@ const AdminDashboard = () => {
             <table className="user-table">
               <thead>
                 <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={allChecked}
+                      ref={el => {
+                        if (el) el.indeterminate = someChecked;
+                      }}
+                      onChange={e => handleSelectAll(e.target.checked)}
+                    />
+                  </th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Role</th>
@@ -125,6 +193,19 @@ const AdminDashboard = () => {
               <tbody>
                 {paginatedUsers.map((u) => (
                   <tr key={u._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedUserIds.includes(u._id)}
+                        onChange={() => {
+                          setSelectedUserIds((prev) =>
+                            prev.includes(u._id)
+                              ? prev.filter((id) => id !== u._id)
+                              : [...prev, u._id]
+                          );
+                        }}
+                      />
+                    </td>
                     <td>{u.username}</td>
                     <td>{u.email}</td>
                     <td>{u.role}</td>
@@ -132,7 +213,6 @@ const AdminDashboard = () => {
                 ))}
               </tbody>
             </table>
-
             <div className="pagination">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
