@@ -15,7 +15,7 @@ export default function ResetPassword() {
     setSuccess(false);
     try {
       const res = await axios.post(
-        `${BACKEND_URL}/api/auth/reset-password`,
+        `${BACKEND_URL}/auth/reset-password`,
         { email, resetCode, newPassword }
       );
       setMessage(res.data.message || "Password reset successful");
