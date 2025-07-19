@@ -9,7 +9,7 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/auth/forgot-password`, { email });
+      const res = await axios.post(`${BACKEND_URL}/auth/forgot-password`, { email });
       setMessage(res.data.message);
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error sending reset email');
