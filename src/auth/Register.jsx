@@ -17,11 +17,25 @@ export default function Register() {
     setError('');
     setSuccess('');
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;
+
+    if (!emailRegex.test(form.email)) {
+      return setError('Please enter a valid email address');
+    }
+
+    if (!strongPasswordRegex.test(form.password)) {
+      return setError(
+        'Password must be at least 8 characters and include uppercase, lowercase, number, and special character'
+      );
+    }
+
     try {
       const res = await fetch(`${BACKEND_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
@@ -69,10 +83,14 @@ export default function Register() {
           style={styles.input}
           required
         />
-        <button type="submit" onClick={handleSubmit} style={styles.button}>Register</button>
+        <button type="submit" onClick={handleSubmit} style={styles.button}>
+          Register
+        </button>
         <p style={styles.text}>
           Already have an account?{' '}
-          <span onClick={() => navigate('/signin')} style={styles.link}>Sign In</span>
+          <span onClick={() => navigate('/signin')} style={styles.link}>
+            Sign In
+          </span>
         </p>
       </div>
     </div>
@@ -98,21 +116,21 @@ const styles = {
     color: '#fff',
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem'
+    gap: '1rem',
   },
   title: {
     color: 'white',
     textAlign: 'center',
     fontSize: '26px',
     letterSpacing: '1px',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   input: {
     padding: '0.75rem',
     borderRadius: '10px',
     border: 'none',
     outline: 'none',
-    fontSize: '16px'
+    fontSize: '16px',
   },
   button: {
     padding: '0.9rem',
@@ -122,7 +140,7 @@ const styles = {
     fontWeight: 'bold',
     color: '#000010',
     cursor: 'pointer',
-    transition: '0.3s ease'
+    transition: '0.3s ease',
   },
   text: {
     color: 'white',
@@ -134,6 +152,6 @@ const styles = {
     color: '#6b8efb',
     textDecoration: 'underline',
     cursor: 'pointer',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 };
