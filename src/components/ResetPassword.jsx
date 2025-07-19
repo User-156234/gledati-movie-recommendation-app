@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { BACKEND_URL } from '../config';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleReset = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export default function ResetPassword() {
       setEmail('');
       setResetCode('');
       setNewPassword('');
+      setTimeout(() => navigate('/signin'), 1500); // <<< Redirect to sign-in after 1.5s
     } catch (err) {
       setMessage(err.response?.data?.message || 'Reset failed');
       setSuccess(false);
@@ -35,7 +38,7 @@ export default function ResetPassword() {
       <form onSubmit={handleReset}>
         <label>Email:</label>
         <input
-          type="email"
+          type="text"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
