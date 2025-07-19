@@ -263,6 +263,7 @@
   }
   
   .cast-list {
+    
     display: flex;
     gap: 24px;
     flex-wrap: nowrap;
@@ -292,9 +293,9 @@
   
   .cast-card img {
     width: 100px;
-    height: 130px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 50% / 60%;
+    border-radius: 60% / 60%;
     border: 3px solid #2f3542;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     transition: transform 0.3s;
