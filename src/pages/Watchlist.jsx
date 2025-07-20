@@ -3,6 +3,7 @@ import { AuthContext } from '../auth/AuthContext';
 import { BACKEND_URL } from '../config';
 import { Link } from 'react-router-dom'; // ✅ Import Link
 import './watchlist.css';
+import { Commet } from 'react-loading-indicators';
 
 export default function Watchlist() {
   const { token } = useContext(AuthContext);
@@ -38,7 +39,25 @@ export default function Watchlist() {
     fetchWatchlist();
   }, [token]);
 
-  if (loading) return <p>Loading watchlist...</p>;
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh', // full viewport height
+          
+        }}
+      >
+        <Commet color="#314ccc" size="medium" text="" textColor="" />
+      </div>
+    );
+  }
+  
+  
+  
+  
 
   return (
     <div className="watchlist-container">

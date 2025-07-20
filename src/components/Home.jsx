@@ -4,6 +4,7 @@ import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import TrendingCarousel from './TrendingCarousel';
 import '../styles/styles.css';
+import { Mosaic } from 'react-loading-indicators';
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
@@ -45,7 +46,19 @@ export default function Home() {
 
       {!search && <TrendingCarousel />}
 
-      {loading && <p className="loading">Loading movies...</p>}
+      {loading &&
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh', // full viewport height
+          
+        }}
+      >
+        <Mosaic color="#314ccc" size="medium" text="" textColor="" />
+      </div>
+    }
 
       {error && (
         <div className="error">

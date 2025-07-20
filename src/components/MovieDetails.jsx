@@ -6,6 +6,7 @@ import axios from 'axios';
 import { AuthContext } from '../auth/AuthContext';
 import './MovieDetails.css';
 import { BACKEND_URL } from '../config';
+import { Atom } from 'react-loading-indicators';
 
 export default function MovieDetails() {
   const { id } = useParams();
@@ -141,21 +142,34 @@ export default function MovieDetails() {
     }
   };
 
-  if (isLoading || !movie) return <div className="container">Loading...</div>;
+  if (isLoading || !movie) return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh', // full viewport height
+        
+      }}
+    >
+      <Atom color="#314ccc" size="medium" text="" textColor="" />
+    </div>
+  );
+  
 
   const trailer = movie.videos.results.find((v) => v.type === 'Trailer');
   const director = movie.credits.crew.find((crew) => crew.job === 'Director');
 
   return (
     <div className="details-container">
-      <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
-
       <div
-        className="details-hero"
-        style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path})`,
-        }}
-      >
+  className="details-hero"
+  style={{
+    backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path})`,
+  }}
+>
+  <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
+
         <div className="details-overlay">
           <h1 className="details-title">{movie.title}</h1>
           <p className="details-tagline">{movie.overview?.slice(0, 300)}...</p>
@@ -272,13 +286,13 @@ export default function MovieDetails() {
                     onClick={() => handleUpdateLink(quality)}
                     style={{ marginLeft: '8px' }}
                   >
-                    💾
+                    Update
                   </button>
                   <button
                     onClick={() => handleDeleteLink(quality)}
                     style={{ marginLeft: '8px', color: 'red', cursor: 'pointer' }}
                   >
-                    ❌
+                    Delete
                   </button>
                 </>
               )}

@@ -10,6 +10,7 @@ import {
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import './Recommendations.css';
+import { LifeLine } from 'react-loading-indicators';
 
 export default function Recommendations() {
   const { genreId, langCode } = useParams();
@@ -175,7 +176,7 @@ export default function Recommendations() {
             onClick={() => navigate(`/recommendations/${genre.id}`)}
           >
             <img
-              src={genreImages[genre.id] || 'https://i.imgur.com/qxjZ4b5.jpg'}
+              src={genreImages[genre.id] || 'https://i.imgur.com/qxjZ4b5.jpghttps://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png'}
               alt={genre.name}
               className="genre-image"
             />
@@ -206,14 +207,26 @@ export default function Recommendations() {
             onClick={() => navigate(`/recommendations/lang/${lang.iso_639_1}`)}
           >
             <img
-              src={languageImages[lang.iso_639_1] || 'https://i.imgur.com/qxjZ4b5.jpg'}
+              src={languageImages[lang.iso_639_1] || 'https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png'}
               alt={lang.english_name}
               className="genre-image"
             />
             <h3>{lang.english_name}</h3>
           </div>
         ))}
-        {filteredLanguages.length === 0 && <p>No languages found.</p>}
+        {filteredLanguages.length === 0 && 
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh', // full viewport height
+          
+        }}
+      >
+        <LifeLine color="#314ccc" size="medium" text="" textColor="" />
+      </div>
+    }
       </div>
     </div>
   );

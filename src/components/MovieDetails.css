@@ -10,45 +10,78 @@
   }
   
   /* Back button */
-  .back-button {
-    margin: 20px;
-    padding: 8px 16px;
-    background-color: #2f3542;
-    border: none;
-    color: #fff;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  .back-button:hover {
-    background-color: #57606f;
-  }
-  
-  /* Hero section with backdrop */
+  /* Back Button */
+.back-button {
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: #2f3542;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.back-button:hover {
+  background-color: #57606f;
+  transform: scale(1.03);
+}
+
+/* Hero Section with Backdrop */
+.details-hero {
+  position: relative;
+  width: 90%;
+  height: 65vh;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 5% 60px;
+  box-shadow: inset 0 -80px 80px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  margin: auto;
+}
+
+/* Overlay Text */
+.details-overlay {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 24px;
+  max-width: 60%;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
   .details-hero {
-    position: relative;
-    
-    width: 90%;
-    height: 65vh;
-    background-size: cover;
-    background-position: center;
-    border-radius: 12px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    padding: 0 5% 60px;
-    box-shadow: inset 0 -80px 80px rgba(0, 0, 0, 0.6);
+    height: 50vh;
+    padding: 0 5% 40px;
+  }
+
+  .details-overlay {
+    top: auto;
+    max-width: 100%;
+    padding: 16px;
+    font-size: 0.95rem;
+  }
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
   }
   
-  /* Overlay text */
-  .details-overlay {
-    background: rgba(0, 0, 0, 0.65);
-    padding: 24px;
-    max-width: 60%;
-    border-radius: 12px;
-    backdrop-filter: blur(4px);
-  }
+}
+
   
   .details-title {
     font-size: 3rem;
