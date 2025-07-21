@@ -274,14 +274,30 @@ export default function MovieDetails() {
               </a>
               {user?.role === 'admin' && (
                 <>
+
                   <input
-                    type="text"
-                    value={downloadLinks[quality]}
-                    onChange={(e) =>
-                      setDownloadLinks({ ...downloadLinks, [quality]: e.target.value })
-                    }
-                    style={{ marginLeft: '10px', width: '300px' }}
-                  />
+  type="text"
+  value={downloadLinks[quality]}
+  onChange={(e) =>
+    setDownloadLinks({ ...downloadLinks, [quality]: e.target.value })
+  }
+  placeholder="Enter download link"
+  style={{
+    marginLeft: '10px',
+    width: '300px',
+    padding: '10px 12px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    fontSize: '16px',
+    outline: 'none',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+  }}
+  onFocus={(e) =>
+    (e.target.style.boxShadow = '0 0 5px rgba(100, 149, 237, 0.5)')
+  }
+  onBlur={(e) => (e.target.style.boxShadow = 'none')}
+/>
+
                   <button
                     onClick={() => handleUpdateLink(quality)}
                     style={{ marginLeft: '8px' }}
