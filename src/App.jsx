@@ -14,6 +14,7 @@ import AdminDashboard from './components/AdminDashboard';
 import EditProfile from './pages/EditProfile';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import Series from './components/Series';
 
 export default function App() {
 
@@ -39,7 +40,14 @@ export default function App() {
             </PrivateRoute>
           }
         />
-        
+        <Route
+          path="/series"
+          element={
+            <PrivateRoute>
+              <Series />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/admin-dashboard"
           element={

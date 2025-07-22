@@ -57,4 +57,18 @@ export const fetchMoviesByLanguage = (langCode, page = 1) => {
   });
 };
 
+// 📺 Trending TV series
+export const fetchTrendingSeries = (page = 1) => {
+  return instance.get('/series', { params: { page } });
+};
+
+// 🔍 Search TV series by name
+export const searchSeries = (query, page = 1) => {
+  return instance.get('/search-series', { params: { query, page } });
+};
+
+// ℹ️ Fetch series details by ID (optional if you plan to show series detail pages)
+export const fetchSeriesDetails = (id) => {
+  return instance.get(`/series/${id}`);
+};
 

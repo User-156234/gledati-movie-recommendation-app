@@ -20,6 +20,7 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
   const [desktopSearchOpen, setDesktopSearchOpen] = useState(false);
 
   const isHomePage = location.pathname === '/home';
+  const isSeriesPage=location.pathname==='/series';
 
   const currentPage = location.pathname.replace('/', '') || 'Trending';
   const formattedPage = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
@@ -57,10 +58,11 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
           <NavLink to="/home" end className={({ isActive }) => (isActive ? 'active' : '')}>Home</NavLink>
           <NavLink to="/upcoming" className={({ isActive }) => (isActive ? 'active' : '')}>Upcoming</NavLink>
           <NavLink to="/recommendations" className={({ isActive }) => (isActive ? 'active' : '')}>Recommendations</NavLink>
+          <NavLink to="/series" className={({ isActive }) => (isActive ? 'active' : '')}>Series</NavLink>
         </div>
 
         <div className="auth-links">
-        {isHomePage && (
+        {isHomePage &&isSeriesPage&& (
   <>
     {!desktopSearchOpen && (
       <button
@@ -150,6 +152,7 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
           <NavLink to="/home" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
           <NavLink to="/upcoming" onClick={() => setMobileMenuOpen(false)}>Upcoming</NavLink>
           <NavLink to="/recommendations" onClick={() => setMobileMenuOpen(false)}>Recommendations</NavLink>
+          <NavLink to="/series" onClick={() => setMobileMenuOpen(false)}>Series</NavLink>
           {user ? (
             <>
               <NavLink to="/profile" onClick={() => setMobileMenuOpen(false)}>Profile</NavLink>
