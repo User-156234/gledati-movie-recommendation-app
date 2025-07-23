@@ -70,24 +70,24 @@ Welcome to **Gledati**, a full-stack web application built using the **TMDB API*
 
 ### 📥 Clone and Run
 
-# 1. Clone the repo
-git clone https://github.com/User-156234/tmdb-movie-recommendation-app.git
-cd tmdb-movie-recommendation-app
+### 1. Clone the repo
+- git clone https://github.com/User-156234/tmdb-movie-recommendation-app.git
+- cd tmdb-movie-recommendation-app
 
-# 2. Install backend dependencies - [Click Here](https://github.com/User-156234/tmdb-backend/) for Backend
+### 2. Install backend dependencies - [Click Here](https://github.com/User-156234/tmdb-backend/) for Backend
 cd backend
 
-# 3. Create a .env file in /backend and add:
-TMDB_API_KEY=your_tmdb_key
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password
-JWT_SECRET=your_jwt_secret
-MONGODB_URI=your_mongodb_uri
+### 3. Create a .env file in /backend and add:
+- TMDB_API_KEY=your_tmdb_key
+- EMAIL_USER=your_email@gmail.com
+- EMAIL_PASSWORD=your_app_password
+- JWT_SECRET=your_jwt_secret
+- MONGODB_URI=your_mongodb_uri
 
-# 4. Start the backend
+### 4. Start the backend
 node server.js
 
-# 5. In a new terminal, setup the frontend
-cd ../frontend
-npm install
-npm start
+### 5. In a new terminal, setup the frontend
+- cd ../frontend
+- npm install
+- npm start
