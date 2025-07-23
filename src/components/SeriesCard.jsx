@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../auth/AuthContext';
 import { BACKEND_URL } from '../config';
+import { useNavigate } from 'react-router-dom';
 import './SeriesCard.css';
 
 export default function SeriesCard({ movie }) {
   const { user, token } = useContext(AuthContext);
   const [added, setAdded] = useState(false);
+  const navigate = useNavigate();
 
   const imageUrl = movie?.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -33,7 +35,7 @@ export default function SeriesCard({ movie }) {
   if (!movie) return null;
 
   const addToWatchlist = async (e) => {
-    e.preventDefault();
+    e.stopPropagation(); // prevent card click redirect
     try {
       const res = await fetch(`${BACKEND_URL}/watchlist`, {
         method: 'POST',
@@ -59,13 +61,17 @@ export default function SeriesCard({ movie }) {
     }
   };
 
+  const goToDetails = () => {
+    navigate(`/series/${movie.id}`);
+  };
+
   return (
-    <div className="series-card-wrapper">
+    <div className="series-card-wrapper" onClick={goToDetails}>
       <div className="series-card">
         <img src={imageUrl} alt={movie.title || 'Movie Poster'} loading="lazy" />
         <div className="series-card-info">
-          <h3 className="series-title">{movie.title}</h3>
-          <p className="series-release-date">{movie.release_date}</p>
+          <h3 className="series-title">{movie.name}</h3>
+          <p className="series-release-date">{movie.first_air_date}</p>
           {user && (
             <button
               className={`series-watchlist-btn ${added ? 'added' : ''}`}

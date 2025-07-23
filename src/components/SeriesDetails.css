@@ -1,0 +1,64 @@
+.series-card1-wrapper {
+    margin: 16px;
+    padding: 12px;
+    background-color: #1e272e;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    max-width: 240px;
+  }
+  
+  .series-card1-wrapper:hover {
+    transform: translateY(-4px);
+  }
+  
+  .series-card1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .series-card1 img {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  .series-card1-info {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .series1-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  
+  .series1-release-date {
+    font-size: 0.9rem;
+    color: #d2dae2;
+    margin-bottom: 8px;
+  }
+  
+  .series1-watchlist-btn {
+    padding: 6px 14px;
+    background-color: #00cec9;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .series1-watchlist-btn:hover {
+    background-color: #0984e3;
+  }
+  
+  .series1-watchlist-btn.added {
+    background-color: #636e72;
+    cursor: not-allowed;
+  }
+  

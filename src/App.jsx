@@ -15,6 +15,7 @@ import EditProfile from './pages/EditProfile';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Series from './components/Series';
+import SeriesDetails from './components/SeriesDetails';
 
 export default function App() {
 
@@ -45,6 +46,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Series />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/series/:id"
+          element={
+            <PrivateRoute>
+              <SeriesDetails />
             </PrivateRoute>
           }
         />

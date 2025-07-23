@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { fetchTrendingSeries } from '../api/tmdb';
 import './TrendingCarousel.css';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function SeriesCarousel() {
   const [seriesList, setSeriesList] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSeries = async () => {
@@ -39,8 +42,10 @@ export default function SeriesCarousel() {
             <h1>{series.name}</h1>
             <p>{series.overview.slice(0, 150)}...</p>
             <div className="carousel-buttons">
-              <button>Watch Now</button>
-              <button>+ Watchlist</button>
+              <button onClick={() => navigate(`/series/${series.id}?playTrailer=true`)}>
+                ▶ Watch Trailer
+              </button>
+              
             </div>
           </div>
         </div>
