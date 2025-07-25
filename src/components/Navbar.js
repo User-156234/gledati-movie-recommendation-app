@@ -62,7 +62,7 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
         </div>
 
         <div className="auth-links">
-        {isHomePage &&isSeriesPage&& (
+        {(isHomePage || isSeriesPage) && (
   <>
     {!desktopSearchOpen && (
       <button

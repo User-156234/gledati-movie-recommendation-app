@@ -29,11 +29,11 @@ export default function SeriesDetails() {
         const res = await fetchSeriesDetails(id); // ✅ Correct call to /series/:id
         setSeries(res.data);
 
-        const providerRes = await axios.get(`${BACKEND_URL}/tmdb/series/${id}/providers`);
+        const providerRes = await axios.get(`${BACKEND_URL}/tmdb/tv/${id}/providers`);
         const providers = providerRes.data.results?.IN?.flatrate || [];
         setWatchProviders(providers);
 
-        const linkRes = await axios.get(`${BACKEND_URL}/download/series-download/${id}`);
+        const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
         setDownloadLinks(linkRes.data.downloadLinks || {});
       } catch (err) {
         console.error('Error loading series details:', err);
@@ -86,7 +86,7 @@ export default function SeriesDetails() {
   const handleSaveLink = async () => {
     try {
       await axios.post(
-        `${BACKEND_URL}/download/admin/series-download`,
+        `${BACKEND_URL}/download/admin/movie-download`,
         {
           movieId: series.id,
           title: series.name,
@@ -110,7 +110,7 @@ export default function SeriesDetails() {
 
   const handleDeleteLink = async (qualityToDelete) => {
     try {
-      await axios.delete(`${BACKEND_URL}/download/admin/series-download/${id}/${qualityToDelete}`, {
+      await axios.delete(`${BACKEND_URL}/download/admin/movie-download/${id}/${qualityToDelete}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,7 +127,7 @@ export default function SeriesDetails() {
   const handleUpdateLink = async (quality) => {
     try {
       await axios.put(
-        `${BACKEND_URL}/download/admin/series-download/${id}/${quality}`,
+        `${BACKEND_URL}/download/admin/movie-download/${id}/${quality}`,
         { newUrl: downloadLinks[quality] },
         {
           headers: {
@@ -220,6 +220,31 @@ export default function SeriesDetails() {
               Add to Watchlist
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Cast List */}
+      <div className="cast-scroll">
+        <h2 style={{ marginBottom: '16px' }}>Cast</h2>
+        <div className="cast-list">
+          {series.credits.cast.slice(0, 8).map((actor) => (
+            <div
+              className="cast-card"
+              key={actor.id}
+              onClick={() => navigate(`/actor/${actor.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img
+                src={
+                  actor.profile_path
+                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                    : '/default-profile.png'
+                }
+                alt={actor.name}
+              />
+              <span>{actor.name}</span>
+            </div>
+          ))}
         </div>
       </div>
 
