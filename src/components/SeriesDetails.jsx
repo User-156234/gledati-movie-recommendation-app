@@ -86,9 +86,9 @@ export default function SeriesDetails() {
   const handleSaveLink = async () => {
     try {
       await axios.post(
-        `${BACKEND_URL}/download/admin/movie-download`,
+        `${BACKEND_URL}/download/admin/series-download`,
         {
-          movieId: series.id,
+          seriesId: series.id,
           title: series.name,
           downloadLink: newLink,
           quality: newQuality,
@@ -110,7 +110,7 @@ export default function SeriesDetails() {
 
   const handleDeleteLink = async (qualityToDelete) => {
     try {
-      await axios.delete(`${BACKEND_URL}/download/admin/movie-download/${id}/${qualityToDelete}`, {
+      await axios.delete(`${BACKEND_URL}/download/admin/series-download/${id}/${qualityToDelete}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,7 +127,7 @@ export default function SeriesDetails() {
   const handleUpdateLink = async (quality) => {
     try {
       await axios.put(
-        `${BACKEND_URL}/download/admin/movie-download/${id}/${quality}`,
+        `${BACKEND_URL}/download/admin/series-download/${id}/${quality}`,
         { newUrl: downloadLinks[quality] },
         {
           headers: {

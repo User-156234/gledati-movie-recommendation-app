@@ -135,7 +135,7 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
         </div>
       </div>
 
-      {isHomePage && mobileSearchOpen && (
+      {(isHomePage||isSeriesPage) && mobileSearchOpen && (
         <div className="mobile-search-bar" ref={searchRef}>
           <input
             type="text"
