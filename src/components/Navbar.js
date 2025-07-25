@@ -124,7 +124,7 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
         <div className="mobile-title">{formattedPage}</div>
 
         <div className="mobile-icons">
-          {isHomePage && (
+          {(isHomePage||isSeriesPage) && (
             <button className="mobile-search-icon" onClick={() => setMobileSearchOpen(!mobileSearchOpen)}>
               <img src={searchIcon} alt="Search" className="icon" />
             </button>
