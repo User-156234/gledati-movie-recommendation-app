@@ -72,3 +72,7 @@ export const fetchSeriesDetails = (id) => {
   return instance.get(`/series/${id}`);
 };
 
+// 📦 Fetch number of seasons and episodes for a series
+export const fetchSeriesSeasonsEpisodes = (id) => {
+  return instance.get(`/series/${id}/seasons-episodes`);
+};

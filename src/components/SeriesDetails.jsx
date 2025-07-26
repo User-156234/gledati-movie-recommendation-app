@@ -2,7 +2,10 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import { BACKEND_URL } from '../config';
-import { fetchSeriesDetails } from '../api/tmdb'; // 🆕 use API utility instead of raw axios
+import {
+  fetchSeriesDetails,
+  fetchSeriesSeasonsEpisodes,
+} from '../api/tmdb';
 import axios from 'axios';
 import Trailer from './Trailer';
 import './SeriesDetails.css';
@@ -20,13 +23,15 @@ export default function SeriesDetails() {
   const [newLink, setNewLink] = useState('');
   const [newQuality, setNewQuality] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [seasonCount, setSeasonCount] = useState(null);
+  const [episodeCount, setEpisodeCount] = useState(null);
 
   const { user, token } = useContext(AuthContext);
 
   useEffect(() => {
     const loadAll = async () => {
       try {
-        const res = await fetchSeriesDetails(id); // ✅ Correct call to /series/:id
+        const res = await fetchSeriesDetails(id);
         setSeries(res.data);
 
         const providerRes = await axios.get(`${BACKEND_URL}/tmdb/tv/${id}/providers`);
@@ -35,6 +40,10 @@ export default function SeriesDetails() {
 
         const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
         setDownloadLinks(linkRes.data.downloadLinks || {});
+
+        const seasonEpRes = await fetchSeriesSeasonsEpisodes(id);
+        setSeasonCount(seasonEpRes.data.number_of_seasons);
+        setEpisodeCount(seasonEpRes.data.number_of_episodes);
       } catch (err) {
         console.error('Error loading series details:', err);
         setDownloadLinks({});
@@ -186,6 +195,8 @@ export default function SeriesDetails() {
           <div className="meta-data">
             <p><strong>Rating:</strong> {series.vote_average}</p>
             <p><strong>First Air Date:</strong> {series.first_air_date}</p>
+            <p><strong>Seasons:</strong> {seasonCount}</p>
+            <p><strong>Total Episodes:</strong> {episodeCount}</p>
             {creator && (
               <p>
                 <strong>Creator:</strong>{' '}
@@ -252,6 +263,32 @@ export default function SeriesDetails() {
       {trailer && (
         <div className="trailer" ref={trailerRef}>
           <Trailer videoKey={trailer.key} />
+        </div>
+      )}
+
+      {/* Seasons */}
+      {series.seasons?.length > 0 && (
+        <div className="seasons-section">
+          <h2 style={{ marginBottom: '16px' }}>Seasons</h2>
+          <div className="seasons-list">
+            {series.seasons.map((season) => (
+              <div className="season-card" key={season.id}>
+                <img
+                  src={
+                    season.poster_path
+                      ? `https://image.tmdb.org/t/p/w185${season.poster_path}`
+                      : '/default-poster.png'
+                  }
+                  alt={season.name}
+                />
+                <div className="season-info">
+                  <h4>{season.name}</h4>
+                  <p><strong>Air Date:</strong> {season.air_date || 'Unknown'}</p>
+                  <p><strong>Episodes:</strong> {season.episode_count}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
