@@ -11,6 +11,8 @@ import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import './Recommendations.css';
 import { LifeLine } from 'react-loading-indicators';
+import Footer from './Footer';
+
 
 export default function Recommendations() {
   const { genreId, langCode } = useParams();
@@ -228,6 +230,7 @@ export default function Recommendations() {
       </div>
     }
       </div>
+      <Footer/>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import SeriesCard from './SeriesCard';
 import HorizontalRow from './HorizontalRow';
 import '../styles/styles.css';
 import { Mosaic } from 'react-loading-indicators';
+import Footer from './Footer';
 
 export default function Series() {
   const [series, setSeries] = useState([]);
@@ -139,7 +140,7 @@ export default function Series() {
             </>
           )}
         </>
-      )}
+      )}<Footer/>
     </div>
   );
 }

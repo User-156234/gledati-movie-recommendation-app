@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import TrendingCarousel from './TrendingCarousel';
 import '../styles/styles.css';
 import { Mosaic } from 'react-loading-indicators';
+import Footer from './Footer';
+
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
@@ -84,6 +86,7 @@ export default function Home() {
             <span> Page {page} </span>
             <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
           </div>
+          <Footer/>
         </>
       )}
     </div>
