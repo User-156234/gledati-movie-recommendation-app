@@ -38,7 +38,7 @@ export default function SeriesDetails() {
         const providers = providerRes.data.results?.IN?.flatrate || [];
         setWatchProviders(providers);
 
-        const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
+        const linkRes = await axios.get(`${BACKEND_URL}/download/series-download/${id}`);
         setDownloadLinks(linkRes.data.downloadLinks || {});
 
         const seasonEpRes = await fetchSeriesSeasonsEpisodes(id);
@@ -74,7 +74,7 @@ export default function SeriesDetails() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          movieId: series.id,
+          seriesId: series.id,
           title: series.name,
           posterPath: series.poster_path,
           overview: series.overview,
