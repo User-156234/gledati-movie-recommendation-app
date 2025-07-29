@@ -76,3 +76,26 @@ export const fetchSeriesDetails = (id) => {
 export const fetchSeriesSeasonsEpisodes = (id) => {
   return instance.get(`/series/${id}/seasons-episodes`);
 };
+
+// 🌟 Popular TV series
+export const fetchPopularSeries = (page = 1) => {
+  return instance.get('/popular-series', { params: { page } });
+};
+
+// 🕒 Upcoming/on-the-air TV series
+export const fetchUpcomingSeries = (page = 1) => {
+  return instance.get('/upcoming-series', { params: { page } });
+};
+
+// 📚 TV genres
+export const fetchTVGenres = () => {
+  return instance.get('/tv-genres');
+};
+
+// 🔍 TV series by genre
+export const fetchSeriesByGenre = (genreId, page = 1) => {
+  return instance.get('/series-by-genre', {
+    params: { genreId, page },
+  });
+};
+
