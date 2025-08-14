@@ -56,7 +56,6 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
 
         <div className="nav-links-center">
           <NavLink to="/home" end className={({ isActive }) => (isActive ? 'active' : '')}>Home</NavLink>
-          <NavLink to="/upcoming" className={({ isActive }) => (isActive ? 'active' : '')}>Upcoming</NavLink>
           <NavLink to="/recommendations" className={({ isActive }) => (isActive ? 'active' : '')}>Recommendations</NavLink>
           <NavLink to="/series" className={({ isActive }) => (isActive ? 'active' : '')}>Series</NavLink>
         </div>
@@ -150,7 +149,6 @@ export default function Navbar({ searchQuery, setSearchQuery, handleSearch }) {
       {mobileMenuOpen && (
         <div className="mobile-dropdown" ref={mobileMenuRef}>
           <NavLink to="/home" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
-          <NavLink to="/upcoming" onClick={() => setMobileMenuOpen(false)}>Upcoming</NavLink>
           <NavLink to="/recommendations" onClick={() => setMobileMenuOpen(false)}>Recommendations</NavLink>
           <NavLink to="/series" onClick={() => setMobileMenuOpen(false)}>Series</NavLink>
           {user ? (
