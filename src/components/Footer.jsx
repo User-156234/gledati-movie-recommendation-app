@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-content">
         
         <div className="footer-socials">
-          <a href="https://github.com/User-156234" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/muralivsrisai" target="_blank" rel="noopener noreferrer">
             <FaGithub />
           </a>
           <a href="https://linkedin.com/in/adabala-murali-veera-sri-sai-32aba228a/" target="_blank" rel="noopener noreferrer">
