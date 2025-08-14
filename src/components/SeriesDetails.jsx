@@ -194,6 +194,8 @@ export default function SeriesDetails() {
         <div className="movie-main-info">
           <div className="meta-data">
             <p><strong>Rating:</strong> {series.vote_average}</p>
+            <p><strong>Genre:</strong> {series.genres?.map(g => g.name).join(', ') || 'N/A'}</p>
+
             <p><strong>First Air Date:</strong> {series.first_air_date}</p>
             <p><strong>Seasons:</strong> {seasonCount}</p>
             <p><strong>Total Episodes:</strong> {episodeCount}</p>

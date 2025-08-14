@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 import { BACKEND_URL } from '../config';
-import '../styles/styles.css';
+import './movieCard.css';
 
 export default function MovieCard({ movie }) {
   const { user, token } = useContext(AuthContext);
@@ -13,18 +13,15 @@ export default function MovieCard({ movie }) {
     : '/fp.jpg';
 
   useEffect(() => {
+    if (!user) return;
     const checkWatchlist = async () => {
-      if (!user) return;
       try {
         const res = await fetch(`${BACKEND_URL}/watchlist`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
-        if (res.ok) {
-          const found = data.find((m) => m.movieId === movie.id);
-          if (found) setAdded(true);
+        if (res.ok && data.find((m) => m.movieId === movie.id)) {
+          setAdded(true);
         }
       } catch (error) {
         console.error('Error checking watchlist:', error);
@@ -67,10 +64,10 @@ export default function MovieCard({ movie }) {
         <img src={imageUrl} alt={movie.title || 'Movie Poster'} loading="lazy" />
         <div className="movie-card-info">
           <h3 className="movie-title">{movie.title}</h3>
-          <p className="release-date">{movie.release_date}</p>
+          <p className="movie-release-date">{movie.release_date}</p>
           {user && (
             <button
-              className={`watchlist-btn ${added ? 'added' : ''}`}
+              className={`movie-watchlist-btn ${added ? 'added' : ''}`}
               onClick={addToWatchlist}
               disabled={added}
             >

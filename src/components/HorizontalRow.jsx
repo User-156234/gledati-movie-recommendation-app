@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import MovieCard from './MovieCard';
 import SeriesCard from './SeriesCard';
 
-const HorizontalRow = ({ title, items }) => {
+const HorizontalRow = ({ title, items, isMovie }) => {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -44,9 +45,9 @@ const HorizontalRow = ({ title, items }) => {
         )}
 
         <div className="scroll-container" ref={scrollRef}>
-          {items.map((tv) => (
-            <div key={tv.id} className="scroll-item">
-              <SeriesCard movie={tv} />
+          {items.map((item) => (
+            <div key={item.id} className="scroll-item">
+              {isMovie ? <MovieCard movie={item} /> : <SeriesCard movie={item} />}
             </div>
           ))}
         </div>

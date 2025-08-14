@@ -194,6 +194,8 @@ export default function MovieDetails() {
           <div className="meta-data">
             <p><strong>Rating:</strong> {movie.vote_average}</p>
             <p><strong>Release Date:</strong> {movie.release_date}</p>
+            <p><strong>Genre:</strong> {movie.genres?.map(g => g.name).join(', ') || 'N/A'}</p>
+
             {director && (
               <p>
                 <strong>Director:</strong>{' '}
