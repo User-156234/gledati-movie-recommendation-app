@@ -43,6 +43,27 @@ export default function MovieDetails() {
         const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
         setDownloadLinks(linkRes.data.downloadLinks || {});
 
+        // ✅ Save genres to localStorage
+if (movieRes.data.genres) {
+  let stored = JSON.parse(localStorage.getItem("viewedGenres")) || [];
+  const newGenres = movieRes.data.genres.map((g) => g.id);
+
+  newGenres.forEach((id) => {
+    // remove if already exists (so it can be pushed to end)
+    stored = stored.filter((g) => g !== id);
+    stored.push(id);
+  });
+
+  // ✅ keep only the latest 5
+  if (stored.length > 5) {
+    stored = stored.slice(-5);
+  }
+
+  localStorage.setItem("viewedGenres", JSON.stringify(stored));
+  console.log("✅ Updated viewedGenres:", stored);
+}
+
+
         // ✅ Fetch similar movies
         const similarRes = await axios.get(`${BACKEND_URL}/tmdb/movie/${id}/similar`);
         setSimilarMovies(similarRes.data.results || []);

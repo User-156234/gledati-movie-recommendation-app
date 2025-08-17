@@ -3,8 +3,8 @@ import {
   fetchTrendingMovies,
   searchMovies,
   fetchUpcomingMovies,
-  fetchGenres,
-  fetchMoviesByGenre
+  fetchMoviesByGenre,
+  fetchGenres
 } from '../api/tmdb';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
@@ -12,13 +12,14 @@ import TrendingCarousel from './TrendingCarousel';
 import '../styles/styles.css';
 import { Mosaic } from 'react-loading-indicators';
 import Footer from './Footer';
-import HorizontalRow from './HorizontalRow'; // we’ll adapt it for movies
+import HorizontalRow from './HorizontalRow';
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [trending, setTrending] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
-  const [genreRows, setGenreRows] = useState([]);
+  const [personalizedRows, setPersonalizedRows] = useState([]);
+  const [genresMap, setGenresMap] = useState({});
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
@@ -43,15 +44,32 @@ export default function Home() {
           setTrending(trendingRes.data.results);
           setUpcoming(upcomingRes.data.results);
 
-          // Top 5 genres
-          const topGenres = genresRes.data.genres.slice(0, 5);
-          const genreData = await Promise.all(
-            topGenres.map(async (g) => {
-              const res = await fetchMoviesByGenre(g.id, 1);
-              return { genre: g.name, movies: res.data.results };
-            })
-          );
-          setGenreRows(genreData);
+          // ✅ Create a lookup map { id: name }
+          const map = {};
+          genresRes.data.genres.forEach((g) => {
+            map[g.id] = g.name;
+          });
+          setGenresMap(map);
+
+          // ✅ Get viewed genres from localStorage
+          const viewedGenres = JSON.parse(localStorage.getItem('viewedGenres')) || [];
+
+if (viewedGenres.length > 0) {
+  // ✅ Already latest 5 stored, but just in case, slice(-5)
+  const latestFive = viewedGenres.slice(-5);
+
+  const genreData = await Promise.all(
+    latestFive.map(async (id) => {
+      const res = await fetchMoviesByGenre(id, 1);
+      return { genreId: id, movies: res.data.results };
+    })
+  );
+
+  setPersonalizedRows(genreData);
+} else {
+  setPersonalizedRows([]);
+}
+
         }
       } catch (err) {
         console.error(err);
@@ -111,9 +129,21 @@ export default function Home() {
             <>
               <HorizontalRow title="Trending Movies" items={trending} isMovie />
               <HorizontalRow title="Upcoming Movies" items={upcoming} isMovie />
-              {genreRows.map((row) => (
-                <HorizontalRow key={row.genre} title={row.genre} items={row.movies} isMovie />
-              ))}
+
+              {/* ✅ Personalized Section */}
+              {personalizedRows.length > 0 && (
+                <>
+                  <h2 style={{ margin: '20px 0' }}>Recommended for You</h2>
+                  {personalizedRows.map((row, index) => (
+                    <HorizontalRow
+                      key={index}
+                      title={`Because you watched ${genresMap[row.genreId] || 'this genre'}`}
+                      items={row.movies}
+                      isMovie
+                    />
+                  ))}
+                </>
+              )}
             </>
           )}
           <Footer />
