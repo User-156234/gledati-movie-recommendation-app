@@ -93,6 +93,55 @@
   .seasons-section::-webkit-scrollbar-thumb:hover {
     background: #222121;
   }
+
+  .similar-series-section {
+    margin-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .similar-series-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-left: 5px;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+  }
+  
+  .similar-series-scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .similar-series-scroll::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 4px;
+  }
+  
+  .similar-series-scroll::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+  
+  .similar-series-card {
+    flex: 0 0 auto;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .similar-series-card img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  .similar-series-card:hover {
+    transform: scale(1.05);
+  }
+  
   
   /* Horizontal scroll on small screens */
   @media (max-width: 768px) {

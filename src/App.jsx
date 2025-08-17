@@ -77,7 +77,7 @@ export default function App() {
           path="/movie/:id"
           element={
             <PrivateRoute>
-              <MovieDetails />
+              <MovieDetails key={window.location.pathname}/>
             </PrivateRoute>
           }
         />

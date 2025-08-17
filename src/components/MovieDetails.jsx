@@ -7,6 +7,8 @@ import { AuthContext } from '../auth/AuthContext';
 import './MovieDetails.css';
 import { BACKEND_URL } from '../config';
 import { Atom } from 'react-loading-indicators';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MovieDetails() {
   const { id } = useParams();
@@ -17,9 +19,14 @@ export default function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [watchProviders, setWatchProviders] = useState([]);
   const [downloadLinks, setDownloadLinks] = useState({});
+  const [similarMovies, setSimilarMovies] = useState([]); // ✅ Similar movies state
   const [newLink, setNewLink] = useState('');
   const [newQuality, setNewQuality] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
 
   const { user, token } = useContext(AuthContext);
 
@@ -35,6 +42,10 @@ export default function MovieDetails() {
 
         const linkRes = await axios.get(`${BACKEND_URL}/download/movie-download/${id}`);
         setDownloadLinks(linkRes.data.downloadLinks || {});
+
+        // ✅ Fetch similar movies
+        const similarRes = await axios.get(`${BACKEND_URL}/tmdb/movie/${id}/similar`);
+        setSimilarMovies(similarRes.data.results || []);
       } catch (err) {
         console.error('Error loading movie details:', err);
         setDownloadLinks({});
@@ -56,6 +67,7 @@ export default function MovieDetails() {
     }
   }, [location.search]);
 
+  // ✅ Add to watchlist
   const handleAddToWatchlist = async (e) => {
     e.preventDefault();
     try {
@@ -75,15 +87,17 @@ export default function MovieDetails() {
 
       const data = await res.json();
       if (res.ok) {
-        alert('Added to watchlist');
+        toast.success('Added to Watchlist!', { position: 'top-right', autoClose: 3000 });
       } else {
-        alert(data.message);
+        toast.error(data.message || 'Failed to add to watchlist', { position: 'top-right', autoClose: 3000 });
       }
     } catch (error) {
       console.error('Error adding to watchlist:', error);
+      toast.error('Something went wrong', { position: 'top-right', autoClose: 3000 });
     }
   };
 
+  // ✅ Save new link
   const handleSaveLink = async () => {
     try {
       await axios.post(
@@ -95,85 +109,69 @@ export default function MovieDetails() {
           quality: newQuality,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       setDownloadLinks({ ...downloadLinks, [newQuality]: newLink });
       setNewLink('');
       setNewQuality('');
-      alert('Download link saved!');
+      toast.success('✅ Download link saved!', { position: 'top-right', autoClose: 3000 });
     } catch (err) {
-      alert('Error saving download link');
+      toast.error('❌ Error saving download link', { position: 'top-right', autoClose: 3000 });
     }
   };
 
+  // ✅ Delete link
   const handleDeleteLink = async (qualityToDelete) => {
     try {
       await axios.delete(`${BACKEND_URL}/download/admin/movie-download/${id}/${qualityToDelete}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const updated = { ...downloadLinks };
       delete updated[qualityToDelete];
       setDownloadLinks(updated);
-      alert('Link deleted successfully');
+      toast.success('✅ Link deleted successfully', { position: 'top-right', autoClose: 3000 });
     } catch (err) {
-      alert('Failed to delete link');
+      toast.error('❌ Failed to delete link', { position: 'top-right', autoClose: 3000 });
     }
   };
 
+  // ✅ Update link
   const handleUpdateLink = async (quality) => {
     try {
       await axios.put(
         `${BACKEND_URL}/download/admin/movie-download/${id}/${quality}`,
         { newUrl: downloadLinks[quality] },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert('Link updated successfully');
+      toast.success('✅ Link updated successfully', { position: 'top-right', autoClose: 3000 });
     } catch (err) {
-      alert('Failed to update link');
+      toast.error('❌ Failed to update link', { position: 'top-right', autoClose: 3000 });
     }
   };
 
   if (isLoading || !movie) return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // full viewport height
-        
-      }}
-    >
-      <Atom color="#314ccc" size="medium" text="" textColor="" />
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Atom color="#314ccc" size="medium" />
     </div>
   );
-  
 
   const trailer = movie.videos.results.find((v) => v.type === 'Trailer');
   const director = movie.credits.crew.find((crew) => crew.job === 'Director');
 
   return (
     <div className="details-container">
+      {/* Hero */}
       <div
-  className="details-hero"
-  style={{
-    backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path})`,
-  }}
->
-  <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
-
+        className="details-hero"
+        style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path})` }}
+      >
+        <button onClick={() => navigate(-1)} className="back-button">⬅ Back</button>
         <div className="details-overlay">
           <h1 className="details-title">{movie.title}</h1>
           <p className="details-tagline">{movie.overview?.slice(0, 300)}...</p>
-
           {trailer && (
             <button
               className="trailer-button"
@@ -189,20 +187,17 @@ export default function MovieDetails() {
         </div>
       </div>
 
+      {/* Movie info */}
       <div className="details-top">
         <div className="movie-main-info">
           <div className="meta-data">
             <p><strong>Rating:</strong> {movie.vote_average}</p>
             <p><strong>Release Date:</strong> {movie.release_date}</p>
             <p><strong>Genre:</strong> {movie.genres?.map(g => g.name).join(', ') || 'N/A'}</p>
-
             {director && (
               <p>
                 <strong>Director:</strong>{' '}
-                <span
-                  style={{ color: '#ff4757', cursor: 'pointer' }}
-                  onClick={() => navigate(`/actor/${director.id}`)}
-                >
+                <span style={{ color: '#ff4757', cursor: 'pointer' }} onClick={() => navigate(`/actor/${director.id}`)}>
                   {director.name}
                 </span>
               </p>
@@ -233,23 +228,14 @@ export default function MovieDetails() {
         </div>
       </div>
 
-      {/* Cast List */}
+      {/* Cast */}
       <div className="cast-scroll">
         <h2 style={{ marginBottom: '16px' }}>Cast</h2>
         <div className="cast-list">
           {movie.credits.cast.slice(0, 8).map((actor) => (
-            <div
-              className="cast-card"
-              key={actor.id}
-              onClick={() => navigate(`/actor/${actor.id}`)}
-              style={{ cursor: 'pointer' }}
-            >
+            <div key={actor.id} className="cast-card" onClick={() => navigate(`/actor/${actor.id}`)}>
               <img
-                src={
-                  actor.profile_path
-                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                    : '/default-profile.png'
-                }
+                src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : '/default-profile.png'}
                 alt={actor.name}
               />
               <span>{actor.name}</span>
@@ -271,47 +257,17 @@ export default function MovieDetails() {
           <h3>Download Links</h3>
           {Object.entries(downloadLinks).map(([quality, url]) => (
             <div key={quality} style={{ marginBottom: '10px' }}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {quality} Download
-              </a>
+              <a href={url} target="_blank" rel="noopener noreferrer">{quality} Download</a>
               {user?.role === 'admin' && (
                 <>
-
                   <input
-  type="text"
-  value={downloadLinks[quality]}
-  onChange={(e) =>
-    setDownloadLinks({ ...downloadLinks, [quality]: e.target.value })
-  }
-  placeholder="Enter download link"
-  style={{
-    marginLeft: '10px',
-    width: '300px',
-    padding: '10px 12px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    fontSize: '16px',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-  }}
-  onFocus={(e) =>
-    (e.target.style.boxShadow = '0 0 5px rgba(100, 149, 237, 0.5)')
-  }
-  onBlur={(e) => (e.target.style.boxShadow = 'none')}
-/>
-
-                  <button
-                    onClick={() => handleUpdateLink(quality)}
-                    style={{ marginLeft: '8px' }}
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => handleDeleteLink(quality)}
-                    style={{ marginLeft: '8px', color: 'red', cursor: 'pointer' }}
-                  >
-                    Delete
-                  </button>
+                    type="text"
+                    value={downloadLinks[quality]}
+                    onChange={(e) => setDownloadLinks({ ...downloadLinks, [quality]: e.target.value })}
+                    style={{ marginLeft: '10px', width: '300px', padding: '10px 12px', borderRadius: '8px' }}
+                  />
+                  <button onClick={() => handleUpdateLink(quality)} style={{ marginLeft: '8px' }}>Update</button>
+                  <button onClick={() => handleDeleteLink(quality)} style={{ marginLeft: '8px', color: 'red' }}>Delete</button>
                 </>
               )}
             </div>
@@ -319,24 +275,44 @@ export default function MovieDetails() {
         </div>
       )}
 
-      {/* Admin input for adding new download links */}
+      {/* Admin add new link */}
       {user?.role === 'admin' && (
         <div className="admin-input">
-          <input
-            type="text"
-            placeholder="Paste new download link"
-            value={newLink}
-            onChange={(e) => setNewLink(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Quality (e.g. 1080p, 720p)"
-            value={newQuality}
-            onChange={(e) => setNewQuality(e.target.value)}
-          />
+          <input type="text" placeholder="Paste new download link" value={newLink} onChange={(e) => setNewLink(e.target.value)} />
+          <input type="text" placeholder="Quality (e.g. 1080p, 720p)" value={newQuality} onChange={(e) => setNewQuality(e.target.value)} />
           <button onClick={handleSaveLink}>Save Link</button>
         </div>
       )}
+
+      {/* ✅ Similar Movies */}
+{similarMovies.length > 0 && (
+  <div className="similar-movies-section">
+    <h2 style={{ margin: '20px 0' }}>Similar Movies</h2>
+    <div className="similar-movies-scroll">
+      {similarMovies.slice(0, 12).map((sim) => (
+        <div
+          key={sim.id}
+          className="similar-movie-card"
+          onClick={() => navigate(`/movie/${sim.id}`,{replace : true})}  // ✅ no replace
+        >
+          <img
+            src={
+              sim.poster_path
+                ? `https://image.tmdb.org/t/p/w342${sim.poster_path}`
+                : '/default-poster.png'
+            }
+            alt={sim.title}
+          />
+          <p>{sim.title}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
+
+      <ToastContainer />
     </div>
   );
 }

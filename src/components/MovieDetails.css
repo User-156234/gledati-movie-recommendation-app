@@ -243,6 +243,51 @@
   .admin-input button:hover {
     background-color: #ff4d4d;
   }
+  .similar-movies-section {
+    margin-top: 40px;
+  }
+  
+  .similar-movies-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #222;
+  }
+  
+  .similar-movies-scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .similar-movies-scroll::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 4px;
+  }
+  
+  .similar-movies-scroll::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+  
+  .similar-movie-card {
+    flex: 0 0 auto;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .similar-movie-card img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  .similar-movie-card:hover {
+    transform: scale(1.05);
+  }
+  
   
   /* Responsive */
   @media (max-width: 768px) {

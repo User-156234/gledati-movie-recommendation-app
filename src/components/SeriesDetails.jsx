@@ -25,6 +25,7 @@ export default function SeriesDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [seasonCount, setSeasonCount] = useState(null);
   const [episodeCount, setEpisodeCount] = useState(null);
+  const [similarSeries, setSimilarSeries] = useState([]);
 
   const { user, token } = useContext(AuthContext);
 
@@ -44,6 +45,10 @@ export default function SeriesDetails() {
         const seasonEpRes = await fetchSeriesSeasonsEpisodes(id);
         setSeasonCount(seasonEpRes.data.number_of_seasons);
         setEpisodeCount(seasonEpRes.data.number_of_episodes);
+
+        // ✅ Fetch similar series
+        const similarRes = await axios.get(`${BACKEND_URL}/tmdb/tv/${id}/similar`);
+        setSimilarSeries(similarRes.data.results || []);
       } catch (err) {
         console.error('Error loading series details:', err);
         setDownloadLinks({});
@@ -159,7 +164,7 @@ export default function SeriesDetails() {
   }
 
   const trailer = series.videos?.results?.find((v) => v.type === 'Trailer' || v.type === 'Teaser');
-  const creator = series.created_by?.[0]?.name;
+  const creator = series.created_by?.[0];
 
   return (
     <div className="details-container">
@@ -206,7 +211,7 @@ export default function SeriesDetails() {
                   style={{ color: '#ff4757', cursor: 'pointer' }}
                   onClick={() => navigate(`/actor/${creator.id}`)}
                 >
-                  {creator}
+                  {creator.name}
                 </span>
               </p>
             )}
@@ -294,6 +299,8 @@ export default function SeriesDetails() {
         </div>
       )}
 
+      
+
       {/* Download Links */}
       {Object.keys(downloadLinks).length > 0 && (
         <div className="download-link-section">
@@ -353,6 +360,32 @@ export default function SeriesDetails() {
             onChange={(e) => setNewQuality(e.target.value)}
           />
           <button onClick={handleSaveLink}>Save Link</button>
+        </div>
+      )}
+
+      {/* ✅ Similar Series */}
+      {similarSeries.length > 0 && (
+        <div className="similar-series-section">
+          <h2 style={{ marginBottom: '16px' }}>Similar Series</h2>
+          <div className="similar-series-scroll">
+            {similarSeries.slice(0, 12).map((sim) => (
+              <div
+                key={sim.id}
+                className="similar-series-card"
+                onClick={() => navigate(`/series/${sim.id}`)}
+              >
+                <img
+                  src={
+                    sim.poster_path
+                      ? `https://image.tmdb.org/t/p/w342${sim.poster_path}`
+                      : '/default-poster.png'
+                  }
+                  alt={sim.name}
+                />
+                <p>{sim.name}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
