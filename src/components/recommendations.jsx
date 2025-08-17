@@ -169,25 +169,9 @@ export default function Recommendations() {
     <div className="container">
       <Navbar />
 
-      <h2 className="genre-title">Select a Genre</h2>
-      <div className="genre-container">
-        {genres.map((genre) => (
-          <div
-            key={genre.id}
-            className="genre-card"
-            onClick={() => navigate(`/recommendations/${genre.id}`)}
-          >
-            <img
-              src={genreImages[genre.id] || 'https://i.imgur.com/qxjZ4b5.jpghttps://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png'}
-              alt={genre.name}
-              className="genre-image"
-            />
-            <h3>{genre.name}</h3>
-          </div>
-        ))}
-      </div>
+      
 
-      <h2 className="genre-title">Or Browse by Language</h2>
+      <h2 className="genre-title"> Browse by Language</h2>
 
       {/* 🔍 Language search input */}
       <div className="language-search-wrapper">
