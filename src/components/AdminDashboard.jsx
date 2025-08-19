@@ -15,6 +15,10 @@ const AdminDashboard = () => {
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [mailSending, setMailSending] = useState(false);
 
+  // ✅ new states
+  const [showDownloads, setShowDownloads] = useState(false);
+  const [downloadLinks, setDownloadLinks] = useState([]);
+
   const { user, token } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -111,7 +115,6 @@ const AdminDashboard = () => {
     }
     setMailSending(false);
   };
-  
 
   const exportToCSV = () => {
     const csv = [
@@ -125,6 +128,21 @@ const AdminDashboard = () => {
     a.href = url;
     a.download = 'users.csv';
     a.click();
+  };
+
+  // ✅ toggle download files
+  const handleToggleDownloads = async () => {
+    if (!showDownloads) {
+      try {
+        const res = await axios.get(`${BACKEND_URL}/admin/download-links`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDownloadLinks(res.data);
+      } catch {
+        alert("Failed to fetch download links");
+      }
+    }
+    setShowDownloads(!showDownloads);
   };
 
   return (
@@ -150,6 +168,9 @@ const AdminDashboard = () => {
           </select>
           <button onClick={exportToCSV} className="export-btn">
             Export CSV
+          </button>
+          <button onClick={handleToggleDownloads} className="download-btn">
+            {showDownloads ? "Hide Download Files" : "Download Files"}
           </button>
         </div>
         <div>
@@ -234,6 +255,42 @@ const AdminDashboard = () => {
           </>
         )}
       </div>
+
+      {/* ✅ Conditionally render downloads */}
+      {showDownloads && (
+        <div className="downloads-section">
+          <h3>Download Files ({downloadLinks.length})</h3>
+          {downloadLinks.length === 0 ? (
+            <p>No download links available.</p>
+          ) : (
+            <table className="downloads-table">
+              <thead>
+                <tr>
+                  <th>Movie ID</th>
+                  <th>Title</th>
+                  <th>Links</th>
+                </tr>
+              </thead>
+              <tbody>
+                {downloadLinks.map((dl) => (
+                  <tr key={dl._id}>
+                    <td>{dl.movieId}</td>
+                    <td>{dl.title}</td>
+                    <td>
+                      {Object.entries(dl.downloadLinks).map(([quality, url]) => (
+                        <div key={quality}>
+                          <strong>{quality}:</strong>{" "}
+                          <a href={url} target="_blank" rel="noreferrer">{url}</a>
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
     </div>
   );
 };
