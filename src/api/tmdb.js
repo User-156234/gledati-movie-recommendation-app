@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // ✅ Backend proxy URL
-const BASE_URL = `https://tmdb-backend-2o43.onrender.com/api/tmdb`;
+const BASE_URL = `https://gledati-backend.onrender.com/api/tmdb`;
 
 const instance = axios.create({
   baseURL: BASE_URL,
